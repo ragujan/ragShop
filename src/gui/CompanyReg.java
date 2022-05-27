@@ -172,7 +172,7 @@ public class CompanyReg extends javax.swing.JDialog {
             public void valueChanged(ListSelectionEvent e) {
                 int row = jTable1.getSelectedRow();
                 if (row != -1) {
-                    
+                    System.out.println("HYEEE");
                     String id = jTable1.getValueAt(row, 0).toString();
                     String name = jTable1.getValueAt(row, 1).toString();
                     String email = jTable1.getValueAt(row, 2).toString();
