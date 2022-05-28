@@ -2,8 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
  */
-package gui;
 
+import gui.ManageProducts;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JOptionPane;
@@ -14,7 +14,7 @@ import model.MySql;
  *
  * @author acer
  */
-public class CategoryReg extends javax.swing.JDialog {
+ class CategoryReg extends javax.swing.JDialog {
        ManageProducts mp = new ManageProducts();
     /**
      * Creates new form NewJDialog

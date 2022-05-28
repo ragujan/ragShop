@@ -21,7 +21,7 @@ class Main {
 
     public static void main(String[] args) {
         JTextArea ta = new JTextArea(20, 20);
-        ((AbstractDocument) ta.getDocument()).setDocumentFilter(new MyFilter());
+        ((AbstractDocument) ta.getDocument()).setDocumentFilter(new MyFilter(ta));
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,16 +33,22 @@ class Main {
 }
 
 class MyFilter extends DocumentFilter {
-
+    JTextArea j;
+    public MyFilter(JTextArea tx){
+        j=tx;
+    }
     @Override
     public void replace(DocumentFilter.FilterBypass fb, int offset, int length,
             String text, AttributeSet attrs) throws BadLocationException {
-        if (offset >= fb.getDocument().getLength()) {
-            System.out.println("Added: " + text);
-        } else {
-            String old = fb.getDocument().getText(offset, length);
-            System.out.println("Replaced " + old + " with " + text);
-        }
+//        if (offset >= fb.getDocument().getLength()) {
+//            System.out.println("Added: " + text);
+//        } else {
+//            String old = fb.getDocument().getText(offset, length);
+//            System.out.println("Replaced " + old + " with " + text);
+//        }
+          if(j.getText().length()==3){
+              j.setText("");
+          }  
         super.replace(fb, offset, length, text, attrs);
     }
 
