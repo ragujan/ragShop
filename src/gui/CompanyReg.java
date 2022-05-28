@@ -160,6 +160,7 @@ public class CompanyReg extends javax.swing.JDialog {
                     br.cid.setText(id);
                     br.cname.setText(name);
                     br.cemail.setText(email);
+
                 }
             }
         });
@@ -172,7 +173,7 @@ public class CompanyReg extends javax.swing.JDialog {
             public void valueChanged(ListSelectionEvent e) {
                 int row = jTable1.getSelectedRow();
                 if (row != -1) {
-                    System.out.println("HYEEE");
+
                     String id = jTable1.getValueAt(row, 0).toString();
                     String name = jTable1.getValueAt(row, 1).toString();
                     String email = jTable1.getValueAt(row, 2).toString();
@@ -181,7 +182,9 @@ public class CompanyReg extends javax.swing.JDialog {
                     br.cemail.setText(email);
                 }
             }
+
         });
+        this.dispose();
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
