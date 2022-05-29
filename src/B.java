@@ -58,12 +58,15 @@ public class B extends javax.swing.JFrame {
     private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
         // TODO add your handling code here:
         String text = jTextField1.getText() + evt.getKeyChar();
-        if (text.equals("abc")) {
-            jTextField1.setText("");
-            jTextField1.setText("YOYO");
+        
+        if(text.equals("ragbag")){
+            evt.consume();
         }
     }//GEN-LAST:event_jTextField1KeyTyped
-
+//       if (jTextField1.getText().equals("abc")) {
+//            jTextField1.setText("");
+//            jTextField1.setText("YOYO");
+//        }
     /**
      * @param args the command line arguments
      */

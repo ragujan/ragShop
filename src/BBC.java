@@ -37,18 +37,20 @@ class MyFilter extends DocumentFilter {
     public MyFilter(JTextArea tx){
         j=tx;
     }
+    String s ;
     @Override
     public void replace(DocumentFilter.FilterBypass fb, int offset, int length,
-            String text, AttributeSet attrs) throws BadLocationException {
-//        if (offset >= fb.getDocument().getLength()) {
-//            System.out.println("Added: " + text);
-//        } else {
-//            String old = fb.getDocument().getText(offset, length);
-//            System.out.println("Replaced " + old + " with " + text);
-//        }
-          if(j.getText().length()==3){
-              j.setText("");
-          }  
+            String text, AttributeSet attrs) throws BadLocationException {        
+        if(s == null){
+            s ="";
+        }
+        s = text+s;
+        System.out.println(s);
+        System.out.println(offset);
+        System.out.println(j.getText());
+        if(j.getText().equals("079")){
+            j.setEditable(false);
+        }
         super.replace(fb, offset, length, text, attrs);
     }
 

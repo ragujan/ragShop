@@ -4,8 +4,17 @@
  */
 package gui;
 
+import java.awt.Color;
 import java.sql.ResultSet;
+import java.util.Vector;
+import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 import model.MySql;
 
 /**
@@ -14,12 +23,28 @@ import model.MySql;
  */
 public class BranchReg extends javax.swing.JFrame {
 
+    SupplierReg sr;
+    BranchReg br;
+
     /**
      * Creates new form BranchReg
      */
     public BranchReg() {
         initComponents();
         loadCity();
+        loadBranches();
+    }
+
+    public BranchReg(SupplierReg sr) {
+        this();
+        br = this;
+
+        br.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        this.sr = sr;
+        
+        tableListernRag();
+        
     }
 
     /**
@@ -321,7 +346,33 @@ public class BranchReg extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    public void tableListernRag() {
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int row = jTable1.getSelectedRow();
+                if (row != -1) {
 
+                    String bid = jTable1.getValueAt(row, 0).toString();
+                    String bname = jTable1.getValueAt(row, 1).toString();
+                    String bcn = jTable1.getValueAt(row, 2).toString();
+                    String cid = jTable1.getValueAt(row, 3).toString();
+                    String cname = jTable1.getValueAt(row, 4).toString();
+
+                    sr.cid.setText(cid);
+                    sr.cname.setText(cname);
+                    sr.bid.setText(bid);
+                    sr.bname.setText(bname);
+                    sr.bcn.setText(bcn);
+                    br.dispose();
+                    System.out.println("SELECTED");
+                }
+            }
+
+        });
+        System.out.println("HEY FIRE");
+
+    }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         CompanyReg cr = new CompanyReg(this, true);
@@ -355,7 +406,38 @@ public class BranchReg extends javax.swing.JFrame {
             jTextField4.setText("Branch_Contact_Number");
         }
     }//GEN-LAST:event_jTextField4FocusLost
+    private void loadBranches() {
+        DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
+        dftm.setRowCount(0);
+        try {
 
+            ResultSet rs = MySql.sq("SELECT * FROM `branch`\n"
+                    + "INNER JOIN `branch_address`\n"
+                    + "ON `branch_address`.`branch_address_id` = `branch`.`branch_address_id`\n"
+                    + "INNER JOIN `company`\n"
+                    + "ON `company`.`company_id` = `branch`.`company_id`\n"
+                    + "INNER JOIN `city`\n"
+                    + "ON `city`.`city_id` = `branch_address`.`city_city_id` ");
+            while (rs.next()) {
+                Vector v = new Vector();
+                v.add(rs.getString("branch_id"));
+                v.add(rs.getString("branch_name"));
+                v.add(rs.getString("branch_contact_number"));
+                v.add(rs.getString("company_id"));
+                v.add(rs.getString("company_name"));
+
+                String add = rs.getString("line_1") + " " + rs.getString("line_2");
+                v.add(add);
+                v.add(rs.getString("city_name"));
+                dftm.addRow(v);
+
+            }
+            jTable1.setModel(dftm);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         String bname = jTextField3.getText();
@@ -366,7 +448,72 @@ public class BranchReg extends javax.swing.JFrame {
         String add1 = jTextField1.getText();
         String add2 = jTextField2.getText();
         String city = jComboBox1.getSelectedItem().toString();
+        JComponent[] jcp = {jTextField3, jTextField4, this.cid, this.cname, this.cemail, jTextField1, jTextField2, jComboBox1};
 
+        if (bname.isEmpty() || bname.equals("Branch_Name")) {
+            JOptionPane.showMessageDialog(this, "please enter a branch", "warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (bcnumber.isBlank() || bcnumber.equals("Branch_Contact_Number")) {
+            JOptionPane.showMessageDialog(this, "please enter a branch number", "warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (!(Pattern.compile("((^0(7)[1-24-66-8])[0-9]{7})").matcher(bcnumber).matches())) {
+            JOptionPane.showMessageDialog(this, "please enter a valid phone number", "warning", JOptionPane.WARNING_MESSAGE);
+        } else if (add1.isBlank() || add1.equals("Address_line_1")) {
+            JOptionPane.showMessageDialog(this, "please add a address", "warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (add2.isBlank() || add2.equals("Address_line_2")) {
+            JOptionPane.showMessageDialog(this, "please add a address", "warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (cid.isBlank() || cid.equals("none")) {
+            JOptionPane.showMessageDialog(this, "please select a company", "warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (cname.isBlank() || cname.equals("none")) {
+            JOptionPane.showMessageDialog(this, "please select a company", "warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (cemail.isBlank() || cemail.equals("none")) {
+            JOptionPane.showMessageDialog(this, "please select a company", "warning", JOptionPane.WARNING_MESSAGE);
+
+        } else if (jComboBox1.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "please select a city", "warning", JOptionPane.WARNING_MESSAGE);
+
+        } else {
+            try {
+                ResultSet rs = MySql.sq("SELECT * FROM `branch` WHERE `branch_name`='" + bname + "' AND `company_id`='" + cid + "'");
+                ResultSet companyNumberCheck = MySql.sq("SELECT * FROM `branch` WHERE `company_id`!='" + cid + "' AND `branch_contact_number`='" + bcnumber + "' ");
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(this, "This company branch already exits", "warning", JOptionPane.WARNING_MESSAGE);
+
+                } else if (companyNumberCheck.next()) {
+                    JOptionPane.showMessageDialog(this, "This company branch number already exits in another company", "warning", JOptionPane.WARNING_MESSAGE);
+
+                } else {
+                    ResultSet addressConfirmrs = MySql.sq("SELECT * FROM `branch_address` WHERE `line_1`='" + add1 + "' AND `line_2`='" + add2 + "'"
+                            + " AND `city_city_id` IN (SELECT `city`.`city_id` FROM `city` WHERE `city_name`='" + city + "')");
+                    if (addressConfirmrs.next()) {
+                        JOptionPane.showMessageDialog(this, "This branch address already exists", "warning", JOptionPane.WARNING_MESSAGE);
+
+                    } else {
+                        MySql.iud("INSERT INTO `branch_address` (`branch_address`.`line_1`,`branch_address`.`line_2`,`branch_address`.`city_city_id`)\n"
+                                + "SELECT '" + add1 + "','" + add2 + "',`city`.`city_id` FROM `city` WHERE `city`.`city_name` ='" + city + "'");
+                        loadBranches();
+                        ResultSet addIDrs = MySql.sq("SELECT * FROM `branch_address` WHERE `line_1`='" + add1 + "' AND `line_2`='" + add2 + "'"
+                                + " AND `city_city_id` IN (SELECT `city`.`city_id` FROM `city` WHERE `city_name`='" + city + "')");
+                        if (addIDrs.next()) {
+                            int id = Integer.parseInt(addIDrs.getString("branch_address_id"));
+                            System.out.println(id);
+                            MySql.iud("INSERT INTO `branch` (`branch_name`,`branch_contact_number`,`branch_address_id`,`company_id`) VALUES"
+                                    + "('" + bname + "','" + bcnumber + "','" + id + "','" + cid + "')");
+                            UtilRag.SetEmptyItems.emptyItems(jcp);
+                            loadBranches();
+                        }
+                    }
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
