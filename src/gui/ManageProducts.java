@@ -7,7 +7,10 @@ package gui;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import model.MySql;
 
@@ -20,11 +23,21 @@ public class ManageProducts extends javax.swing.JFrame {
     /**
      * Creates new form ManageProducts
      */
+    ManageProducts mp = this;
+    GRN grn;
+    
     public ManageProducts() {
         initComponents();
         loadCats();
         loadBrands();
         loadProducts();
+    }
+    
+    public ManageProducts(GRN grn) {
+        this();
+        this.grn = grn;
+        selectTable();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -198,6 +211,27 @@ public class ManageProducts extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+ public void selectTable() {
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int row = jTable1.getSelectedRow();
+                if (row != -1) {
+                    
+                    String pid = jTable1.getValueAt(row, 0).toString();
+                    String pname = jTable1.getValueAt(row, 1).toString();
+                    String brand = jTable1.getValueAt(row, 2).toString();
+                    String category = jTable1.getValueAt(row, 3).toString();
+                    grn.pid.setText(pid);
+                    grn.pname.setText(pname);
+                    grn.pbrand.setText(brand);
+                    grn.pcategory.setText(category);
+                    
+                    mp.dispose();
+                }
+            }
+        });
+    }
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
@@ -228,14 +262,14 @@ public class ManageProducts extends javax.swing.JFrame {
                 Vector v = new Vector();
                 v.add(rs.getString("product_id"));
                 v.add(rs.getString("product_name"));
-
+                
                 v.add(rs.getString("brand_name"));
                 v.add(rs.getString("category_name"));
                 dftm.addRow(v);
-
+                
             }
             jTable1.setModel(dftm);
-
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -248,15 +282,15 @@ public class ManageProducts extends javax.swing.JFrame {
         System.out.println(jComboBox1.getSelectedIndex());
         if (name.isBlank() || name.equals("product_name")) {
             JOptionPane.showMessageDialog(this, "not a valid product name", "warning", JOptionPane.WARNING_MESSAGE);
-
+            
         } else if (jComboBox1.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "please select a brand", "warning", JOptionPane.WARNING_MESSAGE);
-
+            
         } else if (jComboBox2.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "please select a category", "warning", JOptionPane.WARNING_MESSAGE);
-
+            
         } else {
-
+            
             try {
                 ResultSet rs = MySql.sq("SELECT * FROM `product` INNER JOIN `brand` ON "
                         + "`brand`.`brand_id`=`product`.`brand_id` WHERE `product_name`='" + name + "' AND `brand_name`='" + brand + "'");
@@ -287,14 +321,14 @@ public class ManageProducts extends javax.swing.JFrame {
                 v.add(rs.getString("category_id"));
                 v.add(rs.getString("category_name"));
                 String utn = rs.getString("category_name");
-
+                
                 jComboBox2.addItem(utn);
                 //  dftm.addRow(v);
             }
         } catch (Exception e) {
         }
     }
-
+    
     public void loadBrands() {
         //DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
         // dftm.setRowCount(0);
@@ -308,7 +342,7 @@ public class ManageProducts extends javax.swing.JFrame {
                 v.add(rs.getString("brand_id"));
                 v.add(rs.getString("brand_name"));
                 String utn = rs.getString("brand_name");
-
+                
                 jComboBox1.addItem(utn);
                 //  dftm.addRow(v);
             }
