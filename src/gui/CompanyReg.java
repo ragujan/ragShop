@@ -22,7 +22,7 @@ public class CompanyReg extends javax.swing.JDialog {
 
     BranchReg br;
     CompanyReg cr = this;
-
+     
     /**
      * Creates new form CompanyReg
      */
@@ -180,11 +180,13 @@ public class CompanyReg extends javax.swing.JDialog {
                     br.cid.setText(id);
                     br.cname.setText(name);
                     br.cemail.setText(email);
+                    cr.dispose();
                 }
             }
 
         });
-        this.dispose();
+        System.out.println("HEY FIRE");
+        
     }
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
