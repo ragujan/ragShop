@@ -13,7 +13,7 @@ import model.MySql;
  * @author User
  */
 public class SignIn extends javax.swing.JFrame {
-
+   public static int userIDStatic ;
     /**
      * Creates new form SignIn
      */
@@ -111,6 +111,10 @@ public class SignIn extends javax.swing.JFrame {
              try {
                 ResultSet rs=MySql.sq("SELECT * FROM `user` WHERE `user_name`='"+name+"'  AND `user_password`='"+password+"'  ");
                 if(rs.next()){
+                     int userID = Integer.parseInt(rs.getString("user_id"));
+                     
+                     
+                     userIDStatic = userID;
                      JOptionPane.showMessageDialog(this,"Sign In Success", "Success",JOptionPane.INFORMATION_MESSAGE);
                      Home h = new Home();
                      h.setVisible(true);
