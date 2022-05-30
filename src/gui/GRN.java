@@ -7,6 +7,7 @@ package gui;
 import UtilRag.BasicValidator;
 import UtilRag.JOP;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
@@ -29,6 +30,8 @@ public class GRN extends javax.swing.JFrame {
     /**
      * Creates new form GRN
      */
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     public GRN() {
         initComponents();
         this.setTitle("GRN");
@@ -412,7 +415,7 @@ public class GRN extends javax.swing.JFrame {
             .addGap(0, 537, Short.MAX_VALUE)
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jButton1.setText("Select Supplier");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -562,6 +565,10 @@ public class GRN extends javax.swing.JFrame {
 
         jLabel10.setText("Selling Price");
 
+        jDateChooser1.setDateFormatString("yyyy MM dd");
+
+        jDateChooser2.setDateFormatString("yyyy MM dd");
+
         jLabel11.setText("EXP");
 
         jLabel12.setText("MFD");
@@ -678,13 +685,18 @@ public class GRN extends javax.swing.JFrame {
 
         jLabel19.setText("Payment Method");
 
-        jLabel20.setText("Payment");
+        jLabel20.setText("Balance");
 
         jLabel21.setText("Balance");
 
         jLabel22.setText("0.00");
 
         jButton4.setText("Print GRN");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -851,6 +863,24 @@ public class GRN extends javax.swing.JFrame {
     }
     int totalCost = 0;
     int totalS = 0;
+
+    private int updateTotal() {
+        DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
+        int total = 0;
+        if (dftm.getRowCount() >= 1) {
+            for (int i = 0; i < dftm.getRowCount(); i++) {
+
+                total = Integer.parseInt(jTable1.getValueAt(i, 9).toString()) + total;
+                System.out.println("total is " + total);
+            }
+        } else {
+            String buyingPrice = this.jTextField7.getText();
+            String qty = this.jTextField6.getText();
+            total = Integer.parseInt(qty) * Integer.parseInt(buyingPrice);
+        }
+
+        return total;
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         String productID = this.pid.getText();
@@ -862,51 +892,84 @@ public class GRN extends javax.swing.JFrame {
         String sellingPrice = this.jTextField2.getText();
         Date mfd = this.jDateChooser1.getDate();
         Date exp = this.jDateChooser2.getDate();
-        int total = Integer.parseInt(qty) * Integer.parseInt(buyingPrice);
+
         DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
+        if (mfd == null) {
 
-        Vector v = new Vector();
-        v.add(category);
-        v.add(productID);
-        v.add(brand);
-        v.add(productName);
-        v.add(qty);
-        v.add(buyingPrice);
-        v.add(sellingPrice);
-        v.add(mfd);
-        v.add(exp);
-        v.add(total);
-        boolean isFound = false;
+        } else if (mfd.after(new Date())) {
+            JOptionPane.showMessageDialog(this, "Date is not valid", "warning", JOptionPane.WARNING_MESSAGE);
+        } else if (exp == null) {
 
-        if (dftm.getRowCount() >= 1) {
-            for (int i = 0; i < dftm.getRowCount(); i++) {
-                String id = jTable1.getValueAt(i, 1).toString();
+        } else if (exp.before(new Date())) {
+        } else {
+            int total = Integer.parseInt(qty) * Integer.parseInt(buyingPrice);
+            Vector v = new Vector();
+            v.add(category);
+            v.add(productID);
+            v.add(brand);
+            v.add(productName);
+            v.add(qty);
+            v.add(buyingPrice);
+            v.add(sellingPrice);
+            v.add(sdf.format(mfd));
+            v.add(sdf.format(exp));
+            v.add(total);
+            boolean isFound = false;
 
-                System.out.println("Product id is" + id);
-                if (productID.equals(id)) {
-                    isFound = true;
-                    break;
-                } else {
-                    totalS = Integer.parseInt(jTable1.getValueAt(i, 6).toString()) + totalS;
+            if (dftm.getRowCount() >= 1) {
+                for (int i = 0; i < dftm.getRowCount(); i++) {
+                    String id = jTable1.getValueAt(i, 1).toString();
+
+                    System.out.println("Product id is" + id);
+                    if (productID.equals(id)) {
+                        isFound = true;
+                        break;
+                    }
+
                 }
-
             }
-        } else {
-            totalS = total;
+            if (isFound) {
+                JOP.setJOPMessage(this, "The Product is already there do you want to update", "Empty Supplier Values", 1);
+            } else {
+                dftm.addRow(v);
+            }
+            jLabel17.setText(Integer.toString(updateTotal()));
         }
-        if (isFound) {
-            JOP.setJOPMessage(this, "The Product is already there do you want to update", "Empty Supplier Values", 1);
-        } else {
-            dftm.addRow(v);
-        }
-        jLabel17.setText(Integer.toString(totalS));
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
         DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
         System.out.println(dftm.getRowCount());
+        updateTotal();
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        long milli = System.currentTimeMillis();
+        String uid = milli + "_" + SignIn.userIDStatic;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String d = sdf.format(new Date());
+        try {
+            MySql.iud("INSERT INTO `grn`(`grn_date`,`user_id`,`supplier_supplier_id`,`grn_unique_id`) VALUES "
+                    + "('" + d + "','" + SignIn.userIDStatic + "','" + this.sid.getText() + "','" + uid + "')");
+            ResultSet rs = MySql.sq("SELECT * FROM `grn` WHERE `grn_unique_id`='" + uid + "'");
+            rs.next();
+            int grnID = Integer.parseInt(rs.getString("grn_id"));
+            String payment = jTextField8.getText();
+            String paymentType = jComboBox1.getSelectedItem().toString();
+
+            String balance = jTextField9.getText();
+
+            MySql.iud("INSERT INTO `grn_payment` (`payment`,`balance`,`grn_id`,`payment_method_id`)  "
+                    + "SELECT '" + payment + "','0','" + grnID + "',`payment_method_id` FROM `payment_method` WHERE "
+                    + "`payment_method_name`='" + paymentType + "' ");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
     private void jTextDocumentFilterValid() {
 
         String regex = "[0-9]";
