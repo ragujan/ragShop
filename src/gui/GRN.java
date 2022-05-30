@@ -851,6 +851,24 @@ public class GRN extends javax.swing.JFrame {
     }
     int totalCost = 0;
     int totalS = 0;
+
+    private int updateTotal() {
+        DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
+        int total = 0;
+        if (dftm.getRowCount() >= 1) {
+            for (int i = 0; i < dftm.getRowCount(); i++) {
+
+                total = Integer.parseInt(jTable1.getValueAt(i, 9).toString()) + total;
+                System.out.println("total is "+total);
+            }
+        } else {
+            String buyingPrice = this.jTextField7.getText();
+            String qty = this.jTextField6.getText();
+            total = Integer.parseInt(qty) * Integer.parseInt(buyingPrice);
+        }
+
+        return total;
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         String productID = this.pid.getText();
@@ -887,25 +905,26 @@ public class GRN extends javax.swing.JFrame {
                     isFound = true;
                     break;
                 } else {
-                    totalS = Integer.parseInt(jTable1.getValueAt(i, 6).toString()) + totalS;
+                    
                 }
 
             }
         } else {
-            totalS = total;
+            
         }
         if (isFound) {
             JOP.setJOPMessage(this, "The Product is already there do you want to update", "Empty Supplier Values", 1);
         } else {
             dftm.addRow(v);
         }
-        jLabel17.setText(Integer.toString(totalS));
+        jLabel17.setText(Integer.toString(updateTotal()));
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
         DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
         System.out.println(dftm.getRowCount());
+        updateTotal();
     }//GEN-LAST:event_jButton9ActionPerformed
     private void jTextDocumentFilterValid() {
 
