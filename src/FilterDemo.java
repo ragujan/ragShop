@@ -38,6 +38,7 @@ public class FilterDemo {
         AbstractDocument document = (AbstractDocument) field.getDocument();
         final int maxCharacters = 10;
         document.setDocumentFilter(new DocumentFilter() {
+            @Override
             public void replace(FilterBypass fb, int offs, int length,
                     String str, AttributeSet a) throws BadLocationException {
 
@@ -52,6 +53,7 @@ public class FilterDemo {
                 }
             }
 
+            @Override
             public void insertString(FilterBypass fb, int offs, String str,
                     AttributeSet a) throws BadLocationException {
 
@@ -71,6 +73,7 @@ public class FilterDemo {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new FilterDemo();
             }
