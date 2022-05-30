@@ -4,6 +4,7 @@
  */
 package gui;
 
+import UtilRag.BasicValidator;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -754,8 +755,8 @@ public class GRN extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextField6KeyTyped
     private void jTextDocumentFilterValid() {
 
-        String regex = "^[0-9][A-Za-z0-9_ ]*$";
-        int strmaxlength = 5;
+        String regex = "[0-9]";
+        int strmaxlength = 14;
         AbstractDocument ad = (AbstractDocument) jTextField6.getDocument();
         ad.setDocumentFilter(new DocumentFilter() {
             @Override
@@ -774,12 +775,17 @@ public class GRN extends javax.swing.JFrame {
             @Override
             public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
                     AttributeSet attrs) throws BadLocationException {
-                String jtText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
-                System.out.println(jtText);
-                if (jtText.length() <= strmaxlength && jtText.matches(regex)) {
-                    fb.replace(offset, length, text, attrs);
-                }
+                String jtText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                String newText = jtText.substring(0, offset) + text;
+                System.out.println("newText is " + newText);
+                boolean con = BasicValidator.regexMatcher(newText, regex);
 
+                while (con) {
+                    System.out.println("matches");
+                    fb.replace(offset, length, text, attrs);
+                    con = false;
+                }
+                System.out.println("con is " + con);
             }
 
         });

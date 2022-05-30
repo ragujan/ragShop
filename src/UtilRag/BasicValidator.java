@@ -58,4 +58,12 @@ public class BasicValidator {
         }
         return state;
     }
+
+    public static boolean regexMatcher(String text, String regex) {
+        boolean state = false;
+        if ((Pattern.compile(regex).matcher(text).matches())) {
+            state = true;
+        }
+        return state;
+    }
 }
