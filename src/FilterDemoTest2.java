@@ -63,7 +63,6 @@ public class FilterDemoTest2 {
         final int maxCharacters = 20;
         document.setDocumentFilter(new DocumentFilter() {
 
-
             @Override
             public void remove(FilterBypass fb, int offset, int length) throws
                     BadLocationException {
@@ -76,10 +75,17 @@ public class FilterDemoTest2 {
 
             public void replace(FilterBypass fb, int offset, int length,
                     String _text, AttributeSet attrs) throws BadLocationException {
+                System.out.println("////////");
                 System.out.println("REPLACE STRING");
                 String text = fb.getDocument().getText(0, fb.getDocument().getLength());
-                System.out.println("fb.getDocument().getLendth is " + fb.getDocument().getLength());
                 System.out.println("text is " + text);
+                System.out.println("fb.getDocument().getLendth is " + fb.getDocument().getLength());
+                System.out.println("length is " + length);
+                System.out.println("offset is " + offset);
+                System.out.println("text substring 0,offset value is " + text.substring(0, offset));
+                System.out.println("parameter _text is " + _text);
+                
+                System.out.println("substring offset + length is " + text.substring(offset + length));
                 String newText = text.substring(0, offset) + _text + text.substring(offset + length);
                 System.out.println("newText is " + newText);
                 if (newText.length() <= maxCharacters && newText.matches(regex)) {
@@ -89,7 +95,7 @@ public class FilterDemoTest2 {
                 }
             }
 
-          
+            @Override
             public void insertString(FilterBypass fb, int offset, String string,
                     AttributeSet attr) throws BadLocationException {
                 System.out.println("INSERT STRING");
