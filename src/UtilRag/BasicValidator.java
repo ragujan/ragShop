@@ -50,4 +50,12 @@ public class BasicValidator {
 
         return state;
     }
+
+    public static boolean price(String price) {
+        boolean state = false;
+        if (!(Pattern.compile("^[a-zA-Z0-9.]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$").matcher(price).matches())) {
+            state = true;
+        }
+        return state;
+    }
 }

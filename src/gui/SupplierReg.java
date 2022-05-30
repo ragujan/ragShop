@@ -10,6 +10,9 @@ import UtilRag.SetEmptyItems;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import model.MySql;
 
@@ -18,7 +21,11 @@ import model.MySql;
  * @author acer
  */
 public class SupplierReg extends javax.swing.JFrame {
-   GRN grn;
+    
+    SupplierReg sr =this ;
+    GRN grn;
+    
+
     /**
      * Creates new form SupplierReg
      */
@@ -26,10 +33,14 @@ public class SupplierReg extends javax.swing.JFrame {
         initComponents();
         loadSuppliers();
     }
-     public SupplierReg(GRN grn){
-         this();
-         this.grn = grn;
-     }
+
+    public SupplierReg(GRN grn) {
+        this();
+        this.grn = grn;
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        selectTable();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -419,6 +430,32 @@ public class SupplierReg extends javax.swing.JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void selectTable() {
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int row = jTable1.getSelectedRow();
+                if (row != -1) {
+
+                    String sid = jTable1.getValueAt(row, 0).toString();
+                    String sname = jTable1.getValueAt(row, 1).toString();
+                    String scn = jTable1.getValueAt(row, 2).toString();
+                    String bname = jTable1.getValueAt(row, 5).toString();
+                    String cname = jTable1.getValueAt(row, 4).toString();
+                    
+                    grn.sname.setText(sname);
+                    grn.sid.setText(sid);
+                    grn.scontact.setText(scn);
+                    grn.sbranch.setText(bname);
+                    grn.scompany.setText(cname);
+                   
+                    System.out.println("SELECTED");
+                    sr.dispose();
+                }
+            }
+        });
     }
 
     /**
