@@ -4,6 +4,11 @@
  */
 package gui;
 
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+
 /**
  *
  * @author acer
@@ -16,6 +21,7 @@ public class GRN extends javax.swing.JFrame {
     public GRN() {
         initComponents();
         this.setTitle("GRN");
+        jTextDocumentFilterValid();
     }
 
     /**
@@ -516,6 +522,12 @@ public class GRN extends javax.swing.JFrame {
 
         jLabel15.setText("Buying Price");
 
+        jTextField6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField6KeyTyped(evt);
+            }
+        });
+
         jButton2.setText("Select Product");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -720,7 +732,7 @@ public class GRN extends javax.swing.JFrame {
         // TODO add your handling code here:
         SupplierReg sr = new SupplierReg(this);
         sr.setVisible(true);
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -728,6 +740,51 @@ public class GRN extends javax.swing.JFrame {
         ManageProducts mg = new ManageProducts(this);
         mg.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextField6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyTyped
+        // TODO add your handling code here:
+//        String qty = jTextField6.getText();
+//        String text = qty + evt.getKeyChar();
+//        if(Character.isLetter(evt.getKeyChar())){
+//            jTextField6.setEditable(false);
+//            jTextField6.setText("Only Numbers Allowed");
+//        }else{
+//            jTextField6.setEditable(true);
+//        }
+    }//GEN-LAST:event_jTextField6KeyTyped
+    private void jTextDocumentFilterValid() {
+
+        String regex = "^[0-9][A-Za-z0-9_ ]*$";
+        int strmaxlength = 5;
+        AbstractDocument ad = (AbstractDocument) jTextField6.getDocument();
+        ad.setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws
+                    BadLocationException {
+
+                fb.remove(offset, length);
+            }
+
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string,
+                    AttributeSet attr) throws BadLocationException {
+                fb.insertString(offset, string, attr);
+            }
+
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
+                    AttributeSet attrs) throws BadLocationException {
+                String jtText = fb.getDocument().getText(0, fb.getDocument().getLength()) + text;
+                System.out.println(jtText);
+                if (jtText.length() <= strmaxlength && jtText.matches(regex)) {
+                    fb.replace(offset, length, text, attrs);
+                }
+
+            }
+
+        });
+
+    }
 
     /**
      * @param args the command line arguments
