@@ -63,7 +63,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
         String regex = "[0-9]";
         String text = jTextField1.getText()+ evt.getKeyChar();
         System.out.println(text);
-        boolean con = UtilRag.BasicValidator.regexMatcher(text, regex);
+        
         if(!(Pattern.compile("([0-9])").matcher(text).matches())){
             evt.consume();
         }else{
