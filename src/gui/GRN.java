@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -418,6 +419,11 @@ public class GRN extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jButton1.setText("Select Supplier");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -800,6 +806,7 @@ public class GRN extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+
         SupplierReg sr = new SupplierReg(this);
         sr.setVisible(true);
 
@@ -924,7 +931,7 @@ public class GRN extends javax.swing.JFrame {
         } else if (BasicValidator.emptyCheck(qty)) {
             JOP.setJOPMessage(this, "Please enter the qty", "Warning", 1);
         } else {
-           // System.exit(0);
+            // System.exit(0);
             int total = Integer.parseInt(qty) * Integer.parseInt(buyingPrice);
             Vector v = new Vector();
             v.add(category);
@@ -952,10 +959,13 @@ public class GRN extends javax.swing.JFrame {
                 }
             }
             if (isFound) {
-                JOP.setJOPMessage(this, "The Product is already there do you want to update", "Empty Supplier Values", 1);
+
+                int op = JOptionPane.showConfirmDialog(this, "The Product is already there do you want to updatee Product is ", "Duplicate GRN entry", JOptionPane.YES_NO_OPTION);
+                System.out.println(op);
             } else {
                 dftm.addRow(v);
             }
+            jButton1.setEnabled(false);
             jLabel17.setText(Integer.toString(updateTotal()));
         }
 
@@ -989,10 +999,53 @@ public class GRN extends javax.swing.JFrame {
                     + "SELECT '" + payment + "','0','" + grnID + "',`payment_method_id` FROM `payment_method` WHERE "
                     + "`payment_method_name`='" + paymentType + "' ");
 
+            ///Stock insert or update
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                String pid = jTable1.getValueAt(i, 1).toString();
+                System.out.println(pid);
+                //System.exit(0);
+                String qty = jTable1.getValueAt(i, 4).toString();
+                String sprice = jTable1.getValueAt(i, 6).toString();
+                String bprice = jTable1.getValueAt(i, 5).toString();
+                String mfd = jTable1.getValueAt(i, 7).toString();
+                String exp = jTable1.getValueAt(i, 8).toString();
+                String stockID;
+                ResultSet rsStock = MySql.sq("SELECT * FROM `stock` WHERE `selling_price`='" + sprice + "'"
+                        + "AND `mfd_date`='" + mfd + "' AND `exp_date`='" + exp + "' AND `product_id`='" + pid + "'  ");
+                if (rsStock.next()) {
+                   stockID  = rsStock.getString("stock_id").toString();
+                    String updateQty = Integer.toString(Integer.parseInt(rsStock.getString("qty").toString()) + Integer.parseInt(qty));
+                    MySql.iud("UPDATE `stock` SET `qty`='" + updateQty + "' WHERE `stock_id`='" + stockID + "'");
+
+                } else {
+                    MySql.iud("INSERT INTO `stock` (`qty`,`selling_price`,`mfd_date`,`exp_date`,`product_id`)"
+                            + "VALUES ('" + qty + "','" + sprice + "','" + mfd + "','" + exp + "')  ");
+                    ResultSet rsStockInserted = MySql.sq("SELECT * FROM `stock` WHERE `selling_price`='" + sprice + "'"
+                            + "AND `mfd_date`='" + mfd + "' AND `exp_date`='" + exp + "' AND `product_id`='" + pid + "' ");
+                    rsStockInserted.next();
+                    stockID = rsStockInserted.getString("stock_id");
+                    System.out.println("Gotta insert a new one");
+
+                }
+                MySql.iud("INSERT INTO `grn_item` (`qty`,`buying_price`,`stock_id`,`grn_id`) VALUES ('" + qty + "','" + bprice + "','" + stockID + "','" + grnID + "',) ");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        int count = evt.getClickCount();
+        if (count == 2) {
+            int op = JOptionPane.showConfirmDialog(this, "Are you sure you want to change the supplier ", "Attempt to change Supplier", JOptionPane.YES_NO_OPTION);
+            System.out.println(op);
+            if (op == 0) {
+                jButton1.setEnabled(true);
+            }
+        }
+    }//GEN-LAST:event_jButton1MouseClicked
     private void jTextDocumentFilterValid() {
 
         String regex = "[0-9]";
