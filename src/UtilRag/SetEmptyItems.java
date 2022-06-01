@@ -33,10 +33,7 @@ public class SetEmptyItems {
                 JComboBox jb = (JComboBox) jcp[i];
                 jb.setSelectedIndex(0);
             }
-            if (jcp[i] instanceof JDateChooser) {
-                JDateChooser jb = (JDateChooser) jcp[i];
-                jb.setDate(new Date());
-            }
+       
         }
     }
 }
