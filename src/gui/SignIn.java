@@ -4,6 +4,9 @@
  */
 package gui;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.FlatLightLaf;
+import com.formdev.flatlaf.IntelliJTheme;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 import model.MySql;
@@ -13,7 +16,9 @@ import model.MySql;
  * @author User
  */
 public class SignIn extends javax.swing.JFrame {
-   public static int userIDStatic ;
+
+    public static int userIDStatic;
+
     /**
      * Creates new form SignIn
      */
@@ -101,26 +106,25 @@ public class SignIn extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        String name= jTextField1.getText();
+        String name = jTextField1.getText();
         String password = jTextField2.getText();
-        if(name.isBlank()){
-            JOptionPane.showMessageDialog(this,"Empty name input field", "warning",JOptionPane.WARNING_MESSAGE);
-        }else if(password.isBlank()){
-            JOptionPane.showMessageDialog(this,"Empty name password field", "warning",JOptionPane.WARNING_MESSAGE);
-        }else{
-             try {
-                ResultSet rs=MySql.sq("SELECT * FROM `user` WHERE `user_name`='"+name+"'  AND `user_password`='"+password+"'  ");
-                if(rs.next()){
-                     int userID = Integer.parseInt(rs.getString("user_id"));
-                     
-                     
-                     userIDStatic = userID;
-                     JOptionPane.showMessageDialog(this,"Sign In Success", "Success",JOptionPane.INFORMATION_MESSAGE);
-                     Home h = new Home();
-                     h.setVisible(true);
-                     this.dispose();
-                }else{
-                     JOptionPane.showMessageDialog(this,"Sign In failed", "warning",JOptionPane.WARNING_MESSAGE);
+        if (name.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Empty name input field", "warning", JOptionPane.WARNING_MESSAGE);
+        } else if (password.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Empty name password field", "warning", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                ResultSet rs = MySql.sq("SELECT * FROM `user` WHERE `user_name`='" + name + "'  AND `user_password`='" + password + "'  ");
+                if (rs.next()) {
+                    int userID = Integer.parseInt(rs.getString("user_id"));
+
+                    userIDStatic = userID;
+                    JOptionPane.showMessageDialog(this, "Sign In Success", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    Home h = new Home();
+                    h.setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Sign In failed", "warning", JOptionPane.WARNING_MESSAGE);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -138,20 +142,10 @@ public class SignIn extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(SignIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(SignIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(SignIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(SignIn.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            IntelliJTheme.setup(SignIn.class.getResourceAsStream(
+                    "../resources/Night Owl Contrast.theme.json"));
+        } catch (Exception e) {
+            
         }
         //</editor-fold>
 

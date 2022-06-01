@@ -4,6 +4,7 @@
  */
 package gui;
 
+import com.formdev.flatlaf.IntelliJTheme;
 import java.sql.ResultSet;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
@@ -25,14 +26,14 @@ public class ManageProducts extends javax.swing.JFrame {
      */
     ManageProducts mp = this;
     GRN grn;
-    
+
     public ManageProducts() {
         initComponents();
         loadCats();
         loadBrands();
         loadProducts();
     }
-    
+
     public ManageProducts(GRN grn) {
         this();
         this.grn = grn;
@@ -217,7 +218,7 @@ public class ManageProducts extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 int row = jTable1.getSelectedRow();
                 if (row != -1) {
-                    
+
                     String pid = jTable1.getValueAt(row, 0).toString();
                     String pname = jTable1.getValueAt(row, 1).toString();
                     String brand = jTable1.getValueAt(row, 2).toString();
@@ -226,7 +227,7 @@ public class ManageProducts extends javax.swing.JFrame {
                     grn.pname.setText(pname);
                     grn.pbrand.setText(brand);
                     grn.pcategory.setText(category);
-                    
+
                     mp.dispose();
                 }
             }
@@ -262,14 +263,14 @@ public class ManageProducts extends javax.swing.JFrame {
                 Vector v = new Vector();
                 v.add(rs.getString("product_id"));
                 v.add(rs.getString("product_name"));
-                
+
                 v.add(rs.getString("brand_name"));
                 v.add(rs.getString("category_name"));
                 dftm.addRow(v);
-                
+
             }
             jTable1.setModel(dftm);
-            
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -282,15 +283,15 @@ public class ManageProducts extends javax.swing.JFrame {
         System.out.println(jComboBox1.getSelectedIndex());
         if (name.isBlank() || name.equals("product_name")) {
             JOptionPane.showMessageDialog(this, "not a valid product name", "warning", JOptionPane.WARNING_MESSAGE);
-            
+
         } else if (jComboBox1.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "please select a brand", "warning", JOptionPane.WARNING_MESSAGE);
-            
+
         } else if (jComboBox2.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "please select a category", "warning", JOptionPane.WARNING_MESSAGE);
-            
+
         } else {
-            
+
             try {
                 ResultSet rs = MySql.sq("SELECT * FROM `product` INNER JOIN `brand` ON "
                         + "`brand`.`brand_id`=`product`.`brand_id` WHERE `product_name`='" + name + "' AND `brand_name`='" + brand + "'");
@@ -321,14 +322,14 @@ public class ManageProducts extends javax.swing.JFrame {
                 v.add(rs.getString("category_id"));
                 v.add(rs.getString("category_name"));
                 String utn = rs.getString("category_name");
-                
+
                 jComboBox2.addItem(utn);
                 //  dftm.addRow(v);
             }
         } catch (Exception e) {
         }
     }
-    
+
     public void loadBrands() {
         //DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
         // dftm.setRowCount(0);
@@ -342,7 +343,7 @@ public class ManageProducts extends javax.swing.JFrame {
                 v.add(rs.getString("brand_id"));
                 v.add(rs.getString("brand_name"));
                 String utn = rs.getString("brand_name");
-                
+
                 jComboBox1.addItem(utn);
                 //  dftm.addRow(v);
             }
@@ -360,20 +361,9 @@ public class ManageProducts extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ManageProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ManageProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ManageProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ManageProducts.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            IntelliJTheme.setup(SignIn.class.getResourceAsStream(
+                    "../resources/Night Owl Contrast.theme.json"));
+        } catch (Exception e) {
         }
         //</editor-fold>
 
