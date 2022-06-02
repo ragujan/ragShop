@@ -8,6 +8,7 @@ import UtilRag.BasicValidator;
 import UtilRag.GVAT;
 import UtilRag.JOP;
 import com.formdev.flatlaf.IntelliJTheme;
+import java.awt.Color;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -42,8 +43,12 @@ public class GRN extends javax.swing.JFrame {
     public GRN() {
         initComponents();
         this.setTitle("GRN");
-        jTextDocumentFilterValid();
+        setDocFilterTextBuyingPrice();
+        setDocFilterTextSellingPrice();
+        setDocFilterTextQty();
         loadPaymentMethods();
+        jDateChooser1.setForeground(Color.WHITE);
+        jDateChooser2.setForeground(Color.WHITE);
     }
 
     /**
@@ -565,8 +570,10 @@ public class GRN extends javax.swing.JFrame {
 
         jLabel10.setText("Selling Price");
 
+        jDateChooser1.setForeground(new java.awt.Color(255, 255, 255));
         jDateChooser1.setDateFormatString("yyyy MM dd");
 
+        jDateChooser2.setForeground(new java.awt.Color(255, 255, 255));
         jDateChooser2.setDateFormatString("yyyy MM dd");
 
         jLabel11.setText("EXP");
@@ -1001,7 +1008,6 @@ public class GRN extends javax.swing.JFrame {
 
                 ///Stock insert or update
                 for (int i = 0; i < jTable1.getRowCount(); i++) {
-//                String pid = jTable1.getValueAt(i, 1).toString();
 //created a getValueAt Object to return the columns of that table
                     GVAT gvat = new GVAT(jTable1);
                     String pid = gvat.col(i, 1);
@@ -1037,7 +1043,7 @@ public class GRN extends javax.swing.JFrame {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             JOP.setJOPMessage(this, "Please Enter a GRN to the Table", "Empty Entries", 1);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -1086,6 +1092,104 @@ public class GRN extends javax.swing.JFrame {
 
         });
 
+    }
+
+    public void setDocFilterTextBuyingPrice() {
+        AbstractDocument ab = (AbstractDocument) jTextField7.getDocument();
+        ab.setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws
+                    BadLocationException {
+                fb.remove(offset, length);
+            }
+
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string,
+                    AttributeSet attr) throws BadLocationException {
+                fb.insertString(offset, string, attr);
+            }
+
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
+                    AttributeSet attrs) throws BadLocationException {
+                String jtText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                String newText = jtText.substring(0, offset) + text;
+                String regex = "(0|0[.]|0[.][0-9]*)|[1-9]|[1-9][1-9][0-9]*|[1-9][0-9]*[.]|[1-9][0-9]*[.][0-9]*";
+                boolean match = UtilRag.BasicValidator.regexMatcher(newText, regex);
+                if (match) {
+                    fb.replace(offset, length, text, attrs);
+                } else {
+                    System.out.println("Wrong Message");
+                }
+
+            }
+        });
+    }
+
+    public void setDocFilterTextSellingPrice() {
+        AbstractDocument ab = (AbstractDocument) jTextField2.getDocument();
+        ab.setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws
+                    BadLocationException {
+
+                fb.remove(offset, length);
+            }
+
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string,
+                    AttributeSet attr) throws BadLocationException {
+                fb.insertString(offset, string, attr);
+            }
+
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
+                    AttributeSet attrs) throws BadLocationException {
+                String jtText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                String newText = jtText.substring(0, offset) + text;
+                String regex = "(0|0[.]|0[.][0-9]*)|[1-9]|[1-9][1-9][0-9]*|[1-9][0-9]*[.]|[1-9][0-9]*[.][0-9]*";
+                boolean match = UtilRag.BasicValidator.regexMatcher(newText, regex);
+                if (match) {
+                    fb.replace(offset, length, text, attrs);
+                } else {
+                    System.out.println("Wrong Message");
+                }
+
+            }
+        });
+    }
+
+    public void setDocFilterTextQty() {
+        AbstractDocument ab = (AbstractDocument) jTextField6.getDocument();
+        ab.setDocumentFilter(new DocumentFilter() {
+            @Override
+            public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws
+                    BadLocationException {
+
+                fb.remove(offset, length);
+            }
+
+            @Override
+            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string,
+                    AttributeSet attr) throws BadLocationException {
+                fb.insertString(offset, string, attr);
+            }
+
+            @Override
+            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
+                    AttributeSet attrs) throws BadLocationException {
+                String jtText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                String newText = jtText.substring(0, offset) + text;
+                String regex = "([1-9]+)";
+                boolean match = UtilRag.BasicValidator.regexMatcher(newText, regex);
+                if (match) {
+                    fb.replace(offset, length, text, attrs);
+                } else {
+                    System.out.println("Wrong Message");
+                }
+
+            }
+        });
     }
 
     /**
