@@ -17,31 +17,43 @@ import javax.swing.BorderFactory;
  */
 public class MySql {
 
-    private static final String DBNAME= "ragModelShopApp";
-    private  static final  String PASSWORD = "ragJN100Mania";
-     private  static final  String USERNAME = "root";
-    private  static final  String PORT= "8080";
-    private  static final  String HOST = "localhost";
+    private static final String DBNAME = "ragModelShopApp";
+    private static final String PASSWORD = "ragJN100Mania";
+    private static final String USERNAME = "root";
+    private static final String PORT = "8080";
+    private static final String HOST = "localhost";
     private static Connection con;
 
-    public static Statement  con() throws ClassNotFoundException, SQLException {
-      if(con ==null){
-          Class.forName("com.mysql.cj.jdbc.Driver");
-          con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + DBNAME, USERNAME, PASSWORD);
-      }
-      return con.createStatement();
+    public static Statement con() throws ClassNotFoundException, SQLException {
+        if (con == null) {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + DBNAME, USERNAME, PASSWORD);
+        }
+        return con.createStatement();
     }
-    
-    public static void  iud(String query){
+
+    public static void iud(String query) {
         try {
             con().executeUpdate(query);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
-    public static ResultSet sq(String query) throws ClassNotFoundException, SQLException{
-         ResultSet rs = MySql.con().executeQuery(query);     
-         return rs;
+
+    public static ResultSet sq(String query) throws ClassNotFoundException, SQLException {
+        ResultSet rs = MySql.con().executeQuery(query);
+        return rs;
+    }
+
+    public static Connection getConnection() {
+        try {
+            if (con == null) {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                con = DriverManager.getConnection("jdbc:mysql://localhost:3306/" + DBNAME, USERNAME, PASSWORD);
+            }
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return con;
     }
 }
