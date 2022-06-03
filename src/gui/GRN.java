@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -32,9 +33,6 @@ import model.MySql;
  */
 public class GRN extends javax.swing.JFrame {
 
-    JComponent[] allJC = {this.sid, this.sname, this.scontact, this.scompany,
-        this.sbranch, this.pid, this.pname, this.pbrand, this.pcategory, this.jTextField2, this.jTextField7, this.jTextField6,
-        this.jDateChooser1, this.jDateChooser2, this.jComboBox1};
     /**
      * Creates new form GRN
      */
@@ -46,6 +44,7 @@ public class GRN extends javax.swing.JFrame {
         setDocFilterTextBuyingPrice();
         setDocFilterTextSellingPrice();
         setDocFilterTextQty();
+        selectTable();
         loadPaymentMethods();
         jDateChooser1.setForeground(Color.WHITE);
         jDateChooser2.setForeground(Color.WHITE);
@@ -116,6 +115,7 @@ public class GRN extends javax.swing.JFrame {
         scontact = new javax.swing.JLabel();
         scompany = new javax.swing.JLabel();
         sbranch = new javax.swing.JLabel();
+        jButton9 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -461,6 +461,13 @@ public class GRN extends javax.swing.JFrame {
 
         sbranch.setText("none");
 
+        jButton9.setText("jButton9");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -483,12 +490,16 @@ public class GRN extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton9)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jButton1)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -523,6 +534,11 @@ public class GRN extends javax.swing.JFrame {
                 "Category_ID", "Product_ID", "Brand", "Name", "Quantity", "Buying_Price", "Seling_Price", "MFD", "EXP", "Total"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         jPanel2.add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -830,8 +846,11 @@ public class GRN extends javax.swing.JFrame {
         ManageProducts mg = new ManageProducts(this);
         mg.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
     public void selectTable() {
+
         jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+
             @Override
             public void valueChanged(ListSelectionEvent e) {
 
@@ -846,6 +865,7 @@ public class GRN extends javax.swing.JFrame {
 
                 }
             }
+
         });
     }
     private void jTextField6KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyTyped
@@ -1039,7 +1059,7 @@ public class GRN extends javax.swing.JFrame {
                     }
                     MySql.iud("INSERT INTO `grn_item` (`qty`,`buying_price`,`stock_id`,`grn_id`) VALUES ('" + qty + "','" + bprice + "','" + stockID + "','" + grnID + "') ");
                 }
-                UtilRag.SetEmptyItems.emptyItems(this.allJC);
+                //UtilRag.SetEmptyItems.emptyItems(this.allJC);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1060,40 +1080,25 @@ public class GRN extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton1MouseClicked
-    private void jTextDocumentFilterValid() {
 
-        String regex = "[0-9]";
-        int strmaxlength = 14;
-        AbstractDocument ad = (AbstractDocument) jTextField6.getDocument();
-        ad.setDocumentFilter(new DocumentFilter() {
-            @Override
-            public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws
-                    BadLocationException {
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+//        JComponent[] allJC = {this.sid, this.sname, this.scontact, this.scompany,
+//            this.sbranch, this.pid, this.pname, this.pbrand, this.pcategory, this.jTextField2, this.jTextField7, this.jTextField6};
+        JComponent[] allJC = {this.jTextField7, this.jTextField2, this.jTextField6,
+            this.sid, this.sname, this.sbranch, this.scompany, this.scontact, this.pid, this.pbrand, this.pname, this.pcategory};
+        UtilRag.SetEmptyItems.emptyItems(allJC);
+    }//GEN-LAST:event_jButton9ActionPerformed
 
-                fb.remove(offset, length);
-            }
-
-            @Override
-            public void insertString(DocumentFilter.FilterBypass fb, int offset, String string,
-                    AttributeSet attr) throws BadLocationException {
-                fb.insertString(offset, string, attr);
-            }
-
-            @Override
-            public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
-                    AttributeSet attrs) throws BadLocationException {
-                String jtText = fb.getDocument().getText(0, fb.getDocument().getLength());
-                String newText = jtText.substring(0, offset) + text;
-                System.out.println("newText is " + newText);
-                boolean con = BasicValidator.regexMatcher(newText, regex);
-                fb.replace(offset, length, text, attrs);
-
-                System.out.println("con is " + con);
-            }
-
-        });
-
-    }
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+ 
+            int row = jTable1.getSelectedRow();
+            int modelRow = jTable1.convertRowIndexToModel(row);
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.removeRow(modelRow);
+        
+    }//GEN-LAST:event_jTable1MouseClicked
 
     public void setDocFilterTextBuyingPrice() {
         AbstractDocument ab = (AbstractDocument) jTextField7.getDocument();
@@ -1101,6 +1106,7 @@ public class GRN extends javax.swing.JFrame {
             @Override
             public void remove(DocumentFilter.FilterBypass fb, int offset, int length) throws
                     BadLocationException {
+
                 fb.remove(offset, length);
             }
 
@@ -1117,10 +1123,12 @@ public class GRN extends javax.swing.JFrame {
                 String newText = jtText.substring(0, offset) + text;
                 String regex = "(0|0[.]|0[.][0-9]*)|[1-9]|[1-9][1-9][0-9]*|[1-9][0-9]*[.]|[1-9][0-9]*[.][0-9]*";
                 boolean match = UtilRag.BasicValidator.regexMatcher(newText, regex);
-                if (match) {
+
+                if (match || newText.equals("")) {
                     fb.replace(offset, length, text, attrs);
                 } else {
-                    System.out.println("Wrong Message");
+                    fb.remove(0, offset);
+
                 }
 
             }
@@ -1148,12 +1156,13 @@ public class GRN extends javax.swing.JFrame {
                     AttributeSet attrs) throws BadLocationException {
                 String jtText = fb.getDocument().getText(0, fb.getDocument().getLength());
                 String newText = jtText.substring(0, offset) + text;
-                String regex = "(0|0[.]|0[.][0-9]*)|[1-9]|[1-9][1-9][0-9]*|[1-9][0-9]*[.]|[1-9][0-9]*[.][0-9]*";
+                String regex = "(0|0[.]|0[.][0-9]*)|[1-9]|[1-9][1-9][0-9]*|[1-9][1-9][0-9]*|[1-9][1-9]*[.]|[1-9][1-9]*[.][0-9]*";
                 boolean match = UtilRag.BasicValidator.regexMatcher(newText, regex);
-                if (match) {
+
+                if (match || newText.equals("")) {
                     fb.replace(offset, length, text, attrs);
                 } else {
-                    System.out.println("Wrong Message");
+
                 }
 
             }
@@ -1181,12 +1190,12 @@ public class GRN extends javax.swing.JFrame {
                     AttributeSet attrs) throws BadLocationException {
                 String jtText = fb.getDocument().getText(0, fb.getDocument().getLength());
                 String newText = jtText.substring(0, offset) + text;
-                String regex = "([1-9]+)";
+                String regex = "([1-9][0-9]+|[1-9])";
                 boolean match = UtilRag.BasicValidator.regexMatcher(newText, regex);
-                if (match) {
+                if (match || newText.equals("")) {
                     fb.replace(offset, length, text, attrs);
                 } else {
-                    System.out.println("Wrong Message");
+
                 }
 
             }
@@ -1242,6 +1251,7 @@ public class GRN extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private com.toedter.calendar.JDateChooser jDateChooser1;
