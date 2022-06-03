@@ -12,11 +12,13 @@ import java.awt.Color;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -26,6 +28,12 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import model.MySql;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -1003,9 +1011,37 @@ public class GRN extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton3ActionPerformed
+    private  void printGRN(int grn, int uid, JTable jt) {
 
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String d = sdf.format(new Date());
+        String sname = this.sname.getText();
+        String supCon = this.scontact.getText();
+        String GrnID = Integer.toString(grn);
+        String user = Integer.toString(uid);
+
+        TableModel tm = jt.getModel();
+        String jasperPath = "src//reports//JRep1.jrxml";
+        try {
+            JasperReport jr = JasperCompileManager.compileReport(jasperPath);
+            HashMap hm = new HashMap();
+            hm.put("Grnid", GrnID);
+            hm.put("Supplier", sname);
+            hm.put("DateandTime", d);
+            hm.put("User",user);
+            hm.put("Contact",supCon);
+            JRTableModelDataSource jrtmds = new JRTableModelDataSource(tm);
+            JasperPrint jp = JasperFillManager.fillReport(jr, hm,jrtmds);
+            JasperViewer.viewReport(jp,false);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+
+       
         if (jTable1.getRowCount() >= 1) {
 
             long milli = System.currentTimeMillis();
@@ -1058,6 +1094,8 @@ public class GRN extends javax.swing.JFrame {
 
                     }
                     MySql.iud("INSERT INTO `grn_item` (`qty`,`buying_price`,`stock_id`,`grn_id`) VALUES ('" + qty + "','" + bprice + "','" + stockID + "','" + grnID + "') ");
+                    
+                    printGRN(grnID, SignIn.userIDStatic, jTable1);
                 }
                 //UtilRag.SetEmptyItems.emptyItems(this.allJC);
 
@@ -1087,17 +1125,18 @@ public class GRN extends javax.swing.JFrame {
 //            this.sbranch, this.pid, this.pname, this.pbrand, this.pcategory, this.jTextField2, this.jTextField7, this.jTextField6};
         JComponent[] allJC = {this.jTextField7, this.jTextField2, this.jTextField6,
             this.sid, this.sname, this.sbranch, this.scompany, this.scontact, this.pid, this.pbrand, this.pname, this.pcategory};
-        UtilRag.SetEmptyItems.emptyItems(allJC);
+        //UtilRag.SetEmptyItems.emptyItems(allJC);
+        printGRN(1, 1, jTable1);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
- 
-            int row = jTable1.getSelectedRow();
-            int modelRow = jTable1.convertRowIndexToModel(row);
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            model.removeRow(modelRow);
-        
+
+        int row = jTable1.getSelectedRow();
+        int modelRow = jTable1.convertRowIndexToModel(row);
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.removeRow(modelRow);
+
     }//GEN-LAST:event_jTable1MouseClicked
 
     public void setDocFilterTextBuyingPrice() {
