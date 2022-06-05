@@ -28,6 +28,7 @@ import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import model.MySql;
+import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -1011,7 +1012,7 @@ public class GRN extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_jButton3ActionPerformed
-    private  void printGRN(int grn, int uid, JTable jt) {
+    private void printGRN(int grn, int uid, JTable jt) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String d = sdf.format(new Date());
@@ -1020,19 +1021,23 @@ public class GRN extends javax.swing.JFrame {
         String GrnID = Integer.toString(grn);
         String user = Integer.toString(uid);
 
-        TableModel tm = jt.getModel();
+        TableModel tm1 = jt.getModel();
         String jasperPath = "src//reports//JRep1.jrxml";
         try {
             JasperReport jr = JasperCompileManager.compileReport(jasperPath);
             HashMap hm = new HashMap();
             hm.put("Grnid", GrnID);
             hm.put("Supplier", sname);
-            hm.put("DateandTime", d);
-            hm.put("User",user);
-            hm.put("Contact",supCon);
+            hm.put("Dateandtime", d);
+            hm.put("User", user);
+            hm.put("Contact", supCon);
+            TableModel tm = jTable1.getModel();
             JRTableModelDataSource jrtmds = new JRTableModelDataSource(tm);
-            JasperPrint jp = JasperFillManager.fillReport(jr, hm,jrtmds);
-            JasperViewer.viewReport(jp,false);
+//            JasperPrint jp = JasperFillManager.fillReport(jr, hm,jrtmds);
+            JREmptyDataSource jreds = new JREmptyDataSource();
+            JasperPrint jp = JasperFillManager.fillReport(jr, hm, jrtmds);
+            JasperViewer.viewReport(jp, false);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1041,7 +1046,6 @@ public class GRN extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
 
-       
         if (jTable1.getRowCount() >= 1) {
 
             long milli = System.currentTimeMillis();
@@ -1094,7 +1098,7 @@ public class GRN extends javax.swing.JFrame {
 
                     }
                     MySql.iud("INSERT INTO `grn_item` (`qty`,`buying_price`,`stock_id`,`grn_id`) VALUES ('" + qty + "','" + bprice + "','" + stockID + "','" + grnID + "') ");
-                    
+
                     printGRN(grnID, SignIn.userIDStatic, jTable1);
                 }
                 //UtilRag.SetEmptyItems.emptyItems(this.allJC);
@@ -1128,14 +1132,39 @@ public class GRN extends javax.swing.JFrame {
         //UtilRag.SetEmptyItems.emptyItems(allJC);
         printGRN(1, 1, jTable1);
     }//GEN-LAST:event_jButton9ActionPerformed
-
+    int tableclickCount = 0;
+    int tableSelectedRow = 0;
+    int row = 0;
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
 
-        int row = jTable1.getSelectedRow();
-        int modelRow = jTable1.convertRowIndexToModel(row);
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.removeRow(modelRow);
+        tableclickCount++;
+        int previousSelectedRow = row;
+        int currentlySelectedRow = 0;
+        currentlySelectedRow = jTable1.getSelectedRow();
+
+        if (previousSelectedRow == currentlySelectedRow && tableclickCount == 2) {
+            row = currentlySelectedRow;
+            int modelRow = jTable1.convertRowIndexToModel(row);
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.removeRow(modelRow);
+            tableclickCount = 0;
+
+        } else if (previousSelectedRow == currentlySelectedRow && tableclickCount == 1) {
+
+            row = currentlySelectedRow;
+            tableclickCount = 1;
+
+        } else if (previousSelectedRow != currentlySelectedRow && tableclickCount == 1) {
+            row = currentlySelectedRow;
+            tableclickCount = 1;
+
+        } else if (tableclickCount >= 2) {
+
+            tableclickCount = 0;
+        }
+
+
 
     }//GEN-LAST:event_jTable1MouseClicked
 

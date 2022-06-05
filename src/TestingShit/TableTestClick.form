@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -23,16 +23,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" min="-2" pref="512" max="-2" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                  </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                  <Component id="jScrollPane1" min="-2" pref="512" max="-2" attributes="0"/>
+                  <Component id="jTextField1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jTextField2" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="77" max="32767" attributes="0"/>
           </Group>
@@ -43,9 +39,11 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="132" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="139" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="jTextField2" min="-2" pref="42" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+              <Component id="jTextField1" min="-2" pref="64" max="-2" attributes="0"/>
+              <EmptySpace pref="57" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -61,22 +59,26 @@
         <Component class="javax.swing.JTable" name="jTable1">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="2">
+              <Table columnCount="4" rowCount="3">
                 <Column editable="true" title="Title 1" type="java.lang.Object">
                   <Data value="rag"/>
                   <Data value="rag"/>
+                  <Data value="bagrag"/>
                 </Column>
                 <Column editable="true" title="Title 2" type="java.lang.Object">
                   <Data value="rag"/>
                   <Data value="rag"/>
+                  <Data value="ragbag`"/>
                 </Column>
                 <Column editable="true" title="Title 3" type="java.lang.Object">
                   <Data value="rag"/>
                   <Data value="rag"/>
+                  <Data value="333"/>
                 </Column>
                 <Column editable="true" title="Title 4" type="java.lang.Object">
                   <Data value="rag"/>
                   <Data value="rag"/>
+                  <Data value="null"/>
                 </Column>
               </Table>
             </Property>
@@ -108,13 +110,15 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTable1MouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="jLabel1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="jLabel1"/>
-      </Properties>
+    <Component class="javax.swing.JTextField" name="jTextField1">
+    </Component>
+    <Component class="javax.swing.JTextField" name="jTextField2">
     </Component>
   </SubComponents>
 </Form>
