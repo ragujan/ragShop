@@ -17,6 +17,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
@@ -45,6 +46,8 @@ public class GRN extends javax.swing.JFrame {
     /**
      * Creates new form GRN
      */
+    JComponent[] allJC = {this.jTextField7, this.jTextField2, this.jTextField6,
+        this.sid, this.sname, this.sbranch, this.scompany, this.scontact, this.pid, this.pbrand, this.pname, this.pcategory};
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public GRN() {
@@ -55,8 +58,19 @@ public class GRN extends javax.swing.JFrame {
         setDocFilterTextQty();
         selectTable();
         loadPaymentMethods();
+        jButton2.setEnabled(false);
         jDateChooser1.setForeground(Color.WHITE);
         jDateChooser2.setForeground(Color.WHITE);
+    }
+
+    public void setProductButtonEnable() {
+        String sid = this.sid.getText();
+        if (!sid.equals("none")) {
+            jButton2.setEnabled(true);
+        }
+//       if(){
+//           
+//       }
     }
 
     /**
@@ -543,6 +557,7 @@ public class GRN extends javax.swing.JFrame {
                 "Category_ID", "Product_ID", "Brand", "Name", "Quantity", "Buying_Price", "Seling_Price", "MFD", "EXP", "Total"
             }
         ));
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
@@ -847,12 +862,12 @@ public class GRN extends javax.swing.JFrame {
 
         SupplierReg sr = new SupplierReg(this);
         sr.setVisible(true);
-
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        ManageProducts mg = new ManageProducts(this);
+        ManageProducts mg = new ManageProducts(this,Integer.parseInt(this.sid.getText()));
         mg.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -1069,7 +1084,7 @@ public class GRN extends javax.swing.JFrame {
 
                 ///Stock insert or update
                 for (int i = 0; i < jTable1.getRowCount(); i++) {
-//created a getValueAt Object to return the columns of that table
+
                     GVAT gvat = new GVAT(jTable1);
                     String pid = gvat.col(i, 1);
                     System.out.println(pid);
@@ -1127,8 +1142,7 @@ public class GRN extends javax.swing.JFrame {
         // TODO add your handling code here:
 //        JComponent[] allJC = {this.sid, this.sname, this.scontact, this.scompany,
 //            this.sbranch, this.pid, this.pname, this.pbrand, this.pcategory, this.jTextField2, this.jTextField7, this.jTextField6};
-        JComponent[] allJC = {this.jTextField7, this.jTextField2, this.jTextField6,
-            this.sid, this.sname, this.sbranch, this.scompany, this.scontact, this.pid, this.pbrand, this.pname, this.pcategory};
+
         //UtilRag.SetEmptyItems.emptyItems(allJC);
         printGRN(1, 1, jTable1);
     }//GEN-LAST:event_jButton9ActionPerformed
@@ -1163,7 +1177,6 @@ public class GRN extends javax.swing.JFrame {
 
             tableclickCount = 0;
         }
-
 
 
     }//GEN-LAST:event_jTable1MouseClicked

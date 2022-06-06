@@ -50,33 +50,40 @@ public class SetEmptyItems {
 
             if (jcp[i] instanceof JTextField) {
                 JTextField jb = (JTextField) jcp[i];
-                jb.setText("");
-//                AbstractDocument ab = (AbstractDocument) jb.getDocument();
-//                ab.setDocumentFilter(new DocumentFilter() {
-//                    int localOffset=0;
-//                    @Override
-//                    public void replace(DocumentFilter.FilterBypass fb, int offset, int length, String text,
-//                            AttributeSet attrs) throws BadLocationException {
-//                        String jtText = fb.getDocument().getText(0, fb.getDocument().getLength());
-//                        String newText = jtText.substring(0, offset) + text;
-//                        localOffset = offset;
-//                        System.out.println("text is " + text);
-//                        System.out.println("length is " + offset);
-//
-//                        fb.remove(0, offset);
-//                        System.out.println("ABC");
-//
-//                    }
-//                   
-//                });
 
+                jb.setText("");
             }
 
             if (jcp[i] instanceof JComboBox) {
                 JComboBox jb = (JComboBox) jcp[i];
                 jb.setSelectedIndex(0);
             }
+            if (jcp[i] instanceof JDateChooser) {
+                JDateChooser jb = (JDateChooser) jcp[i];
+                jb.setDate(null);
+            }
+        }
+    }
 
+    public static void setDefaultValues(String value, JComponent jcp) {
+        if (jcp instanceof JLabel) {
+            JLabel jb = (JLabel) jcp;
+            jb.setText(value);
+        }
+
+        if (jcp instanceof JTextField) {
+            JTextField jb = (JTextField) jcp;
+
+            jb.setText(value);
+        }
+
+        if (jcp instanceof JComboBox) {
+            JComboBox jb = (JComboBox) jcp;
+            jb.setSelectedIndex(0);
+        }
+        if (jcp instanceof JDateChooser) {
+            JDateChooser jb = (JDateChooser) jcp;
+            jb.setDate(null);
         }
     }
 }
