@@ -37,8 +37,10 @@ public class SupplierReg extends javax.swing.JFrame {
     public SupplierReg(GRN grn) {
         this();
         this.grn = grn;
+        
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         selectTable();
+        
     }
 
     /**
@@ -450,8 +452,8 @@ public class SupplierReg extends javax.swing.JFrame {
                     grn.scontact.setText(scn);
                     grn.sbranch.setText(bname);
                     grn.scompany.setText(cname);
-                   
-                    System.out.println("SELECTED");
+                    grn.setProductButtonEnable();
+            
                     sr.dispose();
                 }
             }

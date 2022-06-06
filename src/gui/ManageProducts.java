@@ -34,7 +34,7 @@ public class ManageProducts extends javax.swing.JFrame {
         loadProducts();
     }
 
-    public ManageProducts(GRN grn) {
+    public ManageProducts(GRN grn, int supplier_id) {
         this();
         this.grn = grn;
         selectTable();
@@ -275,6 +275,32 @@ public class ManageProducts extends javax.swing.JFrame {
             e.printStackTrace();
         }
     }
+
+    private void loadProducts(int sid) {
+        DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
+        dftm.setRowCount(0);
+        try {
+            ResultSet rs = MySql.sq("SELECT * FROM `product`\n"
+                    + "INNER JOIN `brand`\n"
+                    + "ON `brand`.`brand_id` = `product`.`brand_id`\n"
+                    + "INNER JOIN `category`\n"
+                    + "ON `category`.`category_id` = `product`.`category_id`");
+            while (rs.next()) {
+                Vector v = new Vector();
+                v.add(rs.getString("product_id"));
+                v.add(rs.getString("product_name"));
+
+                v.add(rs.getString("brand_name"));
+                v.add(rs.getString("category_name"));
+                dftm.addRow(v);
+
+            }
+            jTable1.setModel(dftm);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         String name = jTextField1.getText();
@@ -310,8 +336,7 @@ public class ManageProducts extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton3ActionPerformed
     public void loadCats() {
-        //DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
-        // dftm.setRowCount(0);
+
         DefaultComboBoxModel dcmb = (DefaultComboBoxModel) jComboBox2.getModel();
         jComboBox2.removeAllItems();
         dcmb.setSelectedItem("Select Category");
