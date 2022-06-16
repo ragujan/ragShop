@@ -6,6 +6,8 @@ package gui;
 
 import UtilRag.JOP;
 import com.formdev.flatlaf.IntelliJTheme;
+import java.text.SimpleDateFormat;
+import java.util.Vector;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -38,11 +40,159 @@ public class Stock extends javax.swing.JFrame {
                 + "INNER JOIN brand \n"
                 + "ON brand.brand_id = product.brand_id\n"
                 + "INNER JOIN category\n"
-                + "ON category.category_id = product.category_id";
-        String[] ltcols = {"stock_id", "product_id", "product_name", "qty", "category_id", "brand_name", "selling_price","buying_price", "mfd_date", "exp_date"};
+                + "ON category.category_id = product.category_id\n"
+                + "GROUP BY stock.stock_id";
+        String[] ltcols = {"stock_id", "product_id", "product_name", "qty", "category_id", "brand_name", "selling_price", "buying_price", "mfd_date", "exp_date"};
         lt.colnames = ltcols;
         lt.loadTable(jTable1);
 
+    }
+
+    public void searchables() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String sortquery = "";
+        String WhereQuery = "";
+
+        System.out.println("getSelectedItem is " + jComboBox1.getSelectedItem());
+        if (jComboBox3.getSelectedItem() == null
+                || jComboBox1.getSelectedItem() == null
+                || jComboBox2.getSelectedItem() == null
+                || jDateChooser1.getDate() == null
+                || jDateChooser2.getDate() == null
+                || jDateChooser3.getDate() == null
+                || jDateChooser4.getDate() == null) {
+            System.out.println("Have to choose one of things");
+        } else {
+
+            String sort = null;
+            String brand = null;
+            String category = null;
+            if (jComboBox3.getSelectedItem() != null) {
+                sort = Integer.toString(jComboBox3.getSelectedIndex());
+            }
+            if (jComboBox1.getSelectedItem() != null) {
+                brand = jComboBox1.getSelectedItem().toString();
+            }
+            if (jComboBox2.getSelectedItem() != null) {
+                category = jComboBox2.getSelectedItem().toString();
+            }
+
+            String name = jTextField2.getText();
+            String minPrice = jTextField3.getText();
+            String maxPrice = jTextField4.getText();
+
+            String mfdTo = null;
+            String mfdFrom = null;
+            String expTo = null;
+            String expFrom = null;
+            if (jDateChooser1.getDate() != null
+                    && jDateChooser2.getDate() != null
+                    && jDateChooser3.getDate() != null
+                    && jDateChooser4.getDate() != null) {
+                mfdTo = sdf.format(jDateChooser1.getDate()).toString();
+                mfdFrom = sdf.format(jDateChooser2.getDate()).toString();
+                expTo = sdf.format(jDateChooser3.getDate()).toString();
+                expFrom = sdf.format(jDateChooser4.getDate()).toString();
+            }
+
+            Vector v = new Vector();
+
+            if (brand.equals("Select Brand")) {
+
+            } else {
+                v.add(" `brand`.`brand_name`='" + brand + "'");
+            }
+            if (category.equals("Select Category")) {
+
+            } else {
+                v.add(" `category`.`category_name`='" + brand + "'");
+            }
+            if (name.isEmpty()) {
+
+            } else {
+                v.add(" `product`.`product_name` LIKE '%" + name + "%'");
+            }
+            if (!minPrice.isEmpty()) {
+
+                if (maxPrice.isEmpty()) {
+                    v.add("`stock`.`selling_price`>= '" + minPrice + "' ");
+                } else {
+                    v.add("`stock`.`selling_price`>= '" + minPrice + "' AND `stock`.`selling_price`<='" + maxPrice + "' ");
+                }
+            }
+            if (!maxPrice.isEmpty()) {
+
+                if (minPrice.isEmpty()) {
+                    v.add("`stock`.`selling_price`>= '" + maxPrice + "' ");
+                } else {
+                    v.add("`stock`.`selling_price`>= '" + minPrice + "' AND `stock`.`selling_price`<='" + maxPrice + "' ");
+                }
+            }
+            if (!mfdFrom.equals(null)) {
+                if (mfdTo.equals(null)) {
+                    v.add("`stock`.`mfd_date`>= '" + mfdFrom + "' ");
+                }
+            }
+            if (!mfdTo.equals(null)) {
+                if (mfdFrom.equals(null)) {
+                    v.add("`stock`.`mfd_date`>= '" + mfdTo + "' ");
+                } else {
+                    v.add("`stock`.`mfd_date`>= '" + mfdFrom + "' AND `stock`.`mfd_date`<='" + mfdTo + "' ");
+                }
+            }
+            if (!expFrom.equals(null)) {
+                if (expTo.equals(null)) {
+                    v.add("`stock`.`exp_date`>= '" + expFrom + "' ");
+                }
+            }
+            if (!expTo.equals(null)) {
+                if (expFrom.equals(null)) {
+                    v.add("`stock`.`exp_date`>= '" + expTo + "' ");
+                } else {
+                    v.add("`stock`.`exp_date`>= '" + expFrom + "' AND `stock`.`exp_date`<='" + expTo + "' ");
+                }
+            }
+            for (int i = 0; i < v.size(); i++) {
+                WhereQuery += "";
+                WhereQuery += v.get(i);
+                if (i != v.size() - 1) {
+                    WhereQuery += " AND";
+                }
+
+            }
+            if (sort.equals("0")) {
+                sortquery = "ORDER BY product.product_name ASC";
+            } else if (sort.equals("1")) {
+                sortquery = "ORDER BY product.product_name DESC";
+            } else if (sort.equals("2")) {
+                sortquery = "ORDER BY stock.selling_price ASC";
+            } else if (sort.equals("3")) {
+                sortquery = "ORDER BY stock.selling_price DESC";
+            } else if (sort.equals("4")) {
+                sortquery = "ORDER BY stock.exp_date ASC";
+            } else if (sort.equals("5")) {
+                sortquery = "ORDER BY stock.exp_date DESC";
+            } else if (sort.equals("6")) {
+                sortquery = "ORDER BY stock.qty ASC";
+            } else if (sort.equals("7")) {
+                sortquery = "ORDER BY stock.qty DESC";
+            }
+            UtilRag.LoadTables lt = new UtilRag.LoadTables();
+            lt.query = "SELECT * FROM stock \n"
+                    + "INNER JOIN grn_item\n"
+                    + "ON grn_item.stock_id = stock.stock_id\n"
+                    + "INNER JOIN product \n"
+                    + "ON product.product_id = stock.product_id\n"
+                    + "INNER JOIN brand \n"
+                    + "ON brand.brand_id = product.brand_id\n"
+                    + "INNER JOIN category\n"
+                    + "ON category.category_id = product.category_id\n"
+                    + "" + WhereQuery + "\n"
+                    + "GROUP BY stock.stock_id  " + sortquery + "";
+            String[] ltcols = {"stock_id", "product_id", "product_name", "qty", "category_id", "brand_name", "selling_price", "buying_price", "mfd_date", "exp_date"};
+            lt.colnames = ltcols;
+            lt.loadTable(jTable1);
+        }
     }
 
     /**
@@ -144,15 +294,57 @@ public class Stock extends javax.swing.JFrame {
 
         jLabel5.setText("Category");
 
-        jLabel6.setText("Price");
+        jLabel6.setText("Name");
+
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+
+        jComboBox2.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox2ItemStateChanged(evt);
+            }
+        });
+
+        jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField2KeyReleased(evt);
+            }
+        });
 
         jLabel7.setText("MFD");
 
+        jDateChooser1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser1PropertyChange(evt);
+            }
+        });
+
         jLabel8.setText("TO");
+
+        jDateChooser2.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser2PropertyChange(evt);
+            }
+        });
 
         jLabel9.setText("EXP");
 
+        jDateChooser3.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser3PropertyChange(evt);
+            }
+        });
+
         jLabel10.setText("TO");
+
+        jDateChooser4.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                jDateChooser4PropertyChange(evt);
+            }
+        });
 
         jLabel11.setText("Selling Price");
 
@@ -160,9 +352,31 @@ public class Stock extends javax.swing.JFrame {
 
         jLabel13.setText("Min");
 
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField3KeyReleased(evt);
+            }
+        });
+
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+        jTextField4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextField4KeyReleased(evt);
+            }
+        });
+
         jLabel14.setText("Sort By");
 
         jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Name ASC", "Name DESC", "Price ASC", "Price DESC", "Expire ASC", "Expire DESC", "Qty ASC", "Qty DESC" }));
+        jComboBox3.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox3ItemStateChanged(evt);
+            }
+        });
 
         jButton2.setText("Reset");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -224,7 +438,7 @@ public class Stock extends javax.swing.JFrame {
                             .addComponent(jDateChooser4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(jTextField2))
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,12 +565,11 @@ public class Stock extends javax.swing.JFrame {
         String newprice = UtilRag.GT.gt(jTextField1);
         String bprice = jLabel3.getText();
         int selectedRow = jTable1.getSelectedRow();
-        String stockID = jTable1.getValueAt(selectedRow, 0).toString();
-        if (selectedRow == -1) {
+        if (Integer.toString(selectedRow).equals("-1")) {
             JOP.setJOPMessage(this, "Please Select a Row", "Warning", 1);
         } else {
+            String stockID = jTable1.getValueAt(selectedRow, 0).toString();
             if (Double.parseDouble(newprice) < Double.parseDouble(bprice)) {
-                // JOP.setJOPMessage(this, "Are you sure you want to do this ", "Warning", 1);
                 int x = JOptionPane.showConfirmDialog(this, "Do you want to continue or not", "Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                 System.out.println("x is " + x);
                 if (x == 0) {
@@ -389,6 +602,61 @@ public class Stock extends javax.swing.JFrame {
         jLabel3.setText(buying);
     }//GEN-LAST:event_jTable1MouseClicked
 
+    private void jComboBox2ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox2ItemStateChanged
+        // TODO add your handling code here://
+        searchables();
+    }//GEN-LAST:event_jComboBox2ItemStateChanged
+
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+
+    private void jTextField3KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyReleased
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jTextField3KeyReleased
+
+    private void jTextField4KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField4KeyReleased
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jTextField4KeyReleased
+
+    private void jComboBox3ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox3ItemStateChanged
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jComboBox3ItemStateChanged
+
+    private void jTextField2KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField2KeyReleased
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jTextField2KeyReleased
+
+    private void jDateChooser1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser1PropertyChange
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jDateChooser1PropertyChange
+
+    private void jDateChooser2PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser2PropertyChange
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jDateChooser2PropertyChange
+
+    private void jDateChooser3PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser3PropertyChange
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jDateChooser3PropertyChange
+
+    private void jDateChooser4PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jDateChooser4PropertyChange
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jDateChooser4PropertyChange
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+        searchables();
+    }//GEN-LAST:event_jTextField4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -400,7 +668,7 @@ public class Stock extends javax.swing.JFrame {
          */
         try {
             IntelliJTheme.setup(SignIn.class.getResourceAsStream(
-                    "../resources/github_dark.theme.json"));
+                    "../resources/Moonlight.theme.json"));
         } catch (Exception e) {
         }
         //</editor-fold>

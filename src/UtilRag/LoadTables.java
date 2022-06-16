@@ -18,13 +18,43 @@ public class LoadTables {
 
     public String query;
     public String[] colnames;
-   
+    public JTable jt;
     int jtableColCount;
+
+    public LoadTables() {
+    }
+
+    public LoadTables(JTable jt, String query,String[] colnames) {
+
+        loadTable(jt, query,colnames);
+    }
+
+    public void loadTable(JTable jt, String query, String[] colnames) {
+
+        jtableColCount = jt.getColumnCount();
+
+        DefaultTableModel dftm = (DefaultTableModel) jt.getModel();
+        dftm.setRowCount(0);
+        try {
+            ResultSet rs = MySql.sq(query);
+            while (rs.next()) {
+                Vector v = new Vector();
+                for (int i = 0; i < jtableColCount; i++) {
+                    v.add(rs.getString(colnames[i]));
+                }
+                dftm.addRow(v);
+            }
+            jt.setModel(dftm);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void loadTable(JTable jt) {
 
         jtableColCount = jt.getColumnCount();
-        
+
         DefaultTableModel dftm = (DefaultTableModel) jt.getModel();
         dftm.setRowCount(0);
         try {
@@ -32,7 +62,7 @@ public class LoadTables {
             while (rs.next()) {
                 Vector v = new Vector();
                 for (int i = 0; i < jtableColCount; i++) {
-                    v.add(rs.getString(colnames[i]));                 
+                    v.add(rs.getString(colnames[i]));
                 }
                 dftm.addRow(v);
             }
