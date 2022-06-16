@@ -15,15 +15,16 @@ public class BasicValidator {
 
     public static boolean emptyCheck(String s) {
         boolean state = false;
-        if (s.isBlank()) {
+        if (s.isEmpty()) {
             state = true;
         }
+        //if its empty return true
         return state;
     }
 
     public static boolean emptyCheck(String s, String placeholder) {
         boolean state = false;
-        if (s.isBlank()) {
+        if (s.isEmpty()) {
             state = true;
         }
         if (s.equals(placeholder)) {
@@ -38,7 +39,7 @@ public class BasicValidator {
         if (!(Pattern.compile("((^0(7)[1-24-66-8])[0-9]{7})").matcher(number).matches())) {
             state = true;
         }
-
+        //if regex pattern is matched return false thts so dumb bro
         return state;
     }
 
@@ -64,6 +65,7 @@ public class BasicValidator {
         if ((Pattern.compile(regex).matcher(text).matches())) {
             state = true;
         }
+        //if regex matched return true
         return state;
     }
 }

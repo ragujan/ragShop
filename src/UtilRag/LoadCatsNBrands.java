@@ -30,9 +30,10 @@ public class LoadCatsNBrands {
                 String utn = rs.getString("category_name");
 
                 jcombobox.addItem(utn);
-             
+
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -50,9 +51,31 @@ public class LoadCatsNBrands {
                 String utn = rs.getString("brand_name");
 
                 jcombobox.addItem(utn);
-              
+
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadCities(JComboBox jcombobox) {
+
+        DefaultComboBoxModel dcmb = (DefaultComboBoxModel) jcombobox.getModel();
+        jcombobox.removeAllItems();
+        dcmb.setSelectedItem("Select City");
+        try {
+            ResultSet rs = MySql.sq("SELECT * FROM `city`");
+            while (rs.next()) {
+                Vector v = new Vector();
+                v.add(rs.getString("city_id"));
+                v.add(rs.getString("city_name"));
+                String utn = rs.getString("city_name");
+
+                jcombobox.addItem(utn);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
