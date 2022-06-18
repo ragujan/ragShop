@@ -16,7 +16,7 @@ import model.MySql;
  * @author acer
  */
 public class BrandReg extends javax.swing.JDialog {
-
+    //manageProduct is a JFrame
     ManageProducts mp = new ManageProducts();
 
     /**
@@ -169,7 +169,7 @@ public class BrandReg extends javax.swing.JDialog {
         try {
             ResultSet rs = MySql.sq("SELECT * FROM `brand`");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("brand_id"));
                 v.add(rs.getString("brand_name"));
                 dftm.addRow(v);
@@ -180,7 +180,7 @@ public class BrandReg extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String text = jTextField1.getText();
-        if (text.isBlank() || text.equals("Brand_Name")) {
+        if (text.isEmpty() || text.equals("Brand_Name")) {
             JOptionPane.showMessageDialog(this, "Should not empty ", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
 

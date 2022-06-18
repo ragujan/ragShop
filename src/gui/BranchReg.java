@@ -439,7 +439,7 @@ public class BranchReg extends javax.swing.JFrame {
                     + "INNER JOIN `city`\n"
                     + "ON `city`.`city_id` = `branch_address`.`city_city_id` ");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("branch_id"));
                 v.add(rs.getString("branch_name"));
                 v.add(rs.getString("branch_contact_number"));
@@ -450,6 +450,7 @@ public class BranchReg extends javax.swing.JFrame {
                 v.add(add);
                 v.add(rs.getString("city_name"));
                 dftm.addRow(v);
+                
 
             }
             jTable1.setModel(dftm);
@@ -473,24 +474,24 @@ public class BranchReg extends javax.swing.JFrame {
         if (bname.isEmpty() || bname.equals("Branch_Name")) {
             JOptionPane.showMessageDialog(this, "please enter a branch", "warning", JOptionPane.WARNING_MESSAGE);
 
-        } else if (bcnumber.isBlank() || bcnumber.equals("Branch_Contact_Number")) {
+        } else if (bcnumber.isEmpty() || bcnumber.equals("Branch_Contact_Number")) {
             JOptionPane.showMessageDialog(this, "please enter a branch number", "warning", JOptionPane.WARNING_MESSAGE);
 
         } else if (!(Pattern.compile("((^0(7)[1-24-66-8])[0-9]{7})").matcher(bcnumber).matches())) {
             JOptionPane.showMessageDialog(this, "please enter a valid phone number", "warning", JOptionPane.WARNING_MESSAGE);
-        } else if (add1.isBlank() || add1.equals("Address_line_1")) {
+        } else if (add1.isEmpty() || add1.equals("Address_line_1")) {
             JOptionPane.showMessageDialog(this, "please add a address", "warning", JOptionPane.WARNING_MESSAGE);
 
-        } else if (add2.isBlank() || add2.equals("Address_line_2")) {
+        } else if (add2.isEmpty() || add2.equals("Address_line_2")) {
             JOptionPane.showMessageDialog(this, "please add a address", "warning", JOptionPane.WARNING_MESSAGE);
 
-        } else if (cid.isBlank() || cid.equals("none")) {
+        } else if (cid.isEmpty() || cid.equals("none")) {
             JOptionPane.showMessageDialog(this, "please select a company", "warning", JOptionPane.WARNING_MESSAGE);
 
-        } else if (cname.isBlank() || cname.equals("none")) {
+        } else if (cname.isEmpty() || cname.equals("none")) {
             JOptionPane.showMessageDialog(this, "please select a company", "warning", JOptionPane.WARNING_MESSAGE);
 
-        } else if (cemail.isBlank() || cemail.equals("none")) {
+        } else if (cemail.isEmpty() || cemail.equals("none")) {
             JOptionPane.showMessageDialog(this, "please select a company", "warning", JOptionPane.WARNING_MESSAGE);
 
         } else if (jComboBox1.getSelectedIndex() == -1) {

@@ -38,7 +38,7 @@ public class LoadTables {
         try {
             ResultSet rs = MySql.sq(query);
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 for (int i = 0; i < jtableColCount; i++) {
                     v.add(rs.getString(colnames[i]));
                 }
@@ -60,7 +60,7 @@ public class LoadTables {
         try {
             ResultSet rs = MySql.sq(this.query);
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 for (int i = 0; i < jtableColCount; i++) {
                     v.add(rs.getString(colnames[i]));
                 }

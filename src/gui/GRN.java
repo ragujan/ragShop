@@ -1009,7 +1009,7 @@ public class GRN extends javax.swing.JFrame {
         } else {
             // System.exit(0);
             int total = Integer.parseInt(qty) * Integer.parseInt(buyingPrice);
-            Vector v = new Vector();
+             Vector<String> v = new Vector<String>();
             v.add(category);
             v.add(productID);
             v.add(brand);
@@ -1059,7 +1059,7 @@ public class GRN extends javax.swing.JFrame {
         String jasperPath = "src//reports//JRep1.jrxml";
         try {
             JasperReport jr = JasperCompileManager.compileReport(jasperPath);
-            HashMap hm = new HashMap();
+            HashMap<String,Object> hm = new HashMap<String,Object>();
             hm.put("Grnid", GrnID);
             hm.put("Supplier", sname);
             hm.put("Dateandtime", d);

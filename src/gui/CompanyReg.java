@@ -13,7 +13,7 @@ import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import model.MySql;
-
+//isEmpty()
 /**
  *
  * @author acer
@@ -192,9 +192,9 @@ public class CompanyReg extends javax.swing.JDialog {
         // TODO add your handling code here:
         String name = jTextField1.getText();
         String contact = jTextField2.getText();
-        if (name.isBlank() || name.equals("Company name")) {
+        if (name.isEmpty() || name.equals("Company name")) {
             JOptionPane.showMessageDialog(this, "not a valid Company name", "warning", JOptionPane.WARNING_MESSAGE);
-        } else if (contact.isBlank() || contact.equals("Company_Email")) {
+        } else if (contact.isEmpty() || contact.equals("Company_Email")) {
             JOptionPane.showMessageDialog(this, "not a valid Contact Email", "warning", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
@@ -248,7 +248,7 @@ public class CompanyReg extends javax.swing.JDialog {
         try {
             ResultSet rs = MySql.sq("SELECT * FROM `company`;");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("company_id"));
                 v.add(rs.getString("company_name"));
 

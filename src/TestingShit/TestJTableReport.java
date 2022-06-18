@@ -91,7 +91,7 @@ public class TestJTableReport extends javax.swing.JFrame {
         try {
             String path = "src//reports//Test.jrxml";
             JasperReport jr = JasperCompileManager.compileReport(path);
-            HashMap hm = new HashMap();
+            HashMap<String,Object> hm = new HashMap<String,Object>();
             TableModel tm = jTable1.getModel();
             JRTableModelDataSource jrds = new JRTableModelDataSource(tm);
             JasperPrint jp = JasperFillManager.fillReport(jr, hm,jrds);

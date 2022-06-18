@@ -8,7 +8,8 @@ import java.awt.List;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.MySql;
 
 /**
@@ -20,19 +21,22 @@ public class InsertTable {
     public InsertTable(String tableName, ArrayList<String> columnValueStringArray) {
         this.tableName = tableName;
         this.columnValueStringArray = columnValueStringArray;
+        this.columnNameStringArray = new ArrayList<String>();
+        this.querybuild = new StringBuilder("");
         setColumnQuery(tableName);
         this.getColumnNames();
         this.setInsertQueryTable();
         this.setValuesforColumns();
-        this.insertExecuteQuery();
+        this.executeInsertQuery();
     }
 
-    String query;
+    public String query;
     private String tableName;
     private String columnQuery;
     private String columnName;
-    private ArrayList<String> columnNameStringArray = new ArrayList<String>();
-    private ArrayList<String> columnValueStringArray = new ArrayList<String>();
+    public StringBuilder querybuild;
+    private ArrayList<String> columnNameStringArray;
+    private ArrayList<String> columnValueStringArray;
 
     private void setColumnQuery(String tableName) {
         this.columnQuery = "SELECT *\n"
@@ -49,63 +53,55 @@ public class InsertTable {
         ResultSet columnNameRs = null;
 
         try {
-            ResultSet columnNameRsResult = MySql.sq(columnQuery);
-            columnNameRs = columnNameRsResult;
-            while (columnNameRsResult.next()) {
-                columnNameStringArray.add(columnNameRsResult.getString("COLUMN_NAME"));
-            }
+            columnNameRs = MySql.sq(columnQuery);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+            while (columnNameRs.next()) {
+                columnNameStringArray.add(columnNameRs.getString("COLUMN_NAME"));
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(InsertTable.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(InsertTable.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return columnNameRs;
     }
 
     private void setInsertQueryTable() {
-        String query;
-        this.query = "INSERT INTO " + this.tableName + " (";
 
+        querybuild.append("INSERT INTO " + this.tableName + " (");
         for (int i = 0; i < this.columnNameStringArray.size(); i++) {
-            this.query += this.columnNameStringArray.get(i);
+            querybuild.append(this.columnNameStringArray.get(i));
 
             if (i != this.columnNameStringArray.size() - 1) {
-                this.query += ",";
+
+                querybuild.append(",");
             }
         }
-        this.query += ") VALUES (";
-
+        querybuild.append(") VALUES (");
+        
     }
 
     private void setValuesforColumns() {
+
         for (int i = 0; i < columnValueStringArray.size(); i++) {
-            this.query += " '" + this.columnValueStringArray.get(i) + "' ";
+            querybuild.append(" '" + this.columnValueStringArray.get(i) + "' ");
 
             if (i != this.columnValueStringArray.size() - 1) {
-                this.query += ",";
+                querybuild.append(",");
             }
         }
-        this.query += ");";
+        querybuild.append(");");
 
     }
 
-    private void insertExecuteQuery() {
+    private void executeInsertQuery() {
         try {
-            MySql.iud(this.query);
+            MySql.iud(this.querybuild.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 }
 
-//class Test {
-//
-//    public static void main(String[] args) {
-//        ArrayList<String> columnValueStringArray = new ArrayList<String>();
-//        columnValueStringArray.add("rag");
-//        columnValueStringArray.add("rag");
-//        columnValueStringArray.add("1");
-//        InsertTable itc = new InsertTable("customer", columnValueStringArray);
-//        System.out.println(itc.query);
-//
-//    }
-//}
+

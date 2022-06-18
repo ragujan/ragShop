@@ -35,7 +35,7 @@ public class JasperReportTest {
 
             String jspath = "src//reports//Test.jrxml";
             JasperReport jr = JasperCompileManager.compileReport(jspath);
-            HashMap hm = new HashMap();
+            HashMap<String,Object> hm = new HashMap<String,Object>();
             hm.put("Parameter1", "rag");
             hm.put("Parameter2", "123");
             
