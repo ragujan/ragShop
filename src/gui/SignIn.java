@@ -108,9 +108,9 @@ public class SignIn extends javax.swing.JFrame {
         // TODO add your handling code here:
         String name = jTextField1.getText();
         String password = jTextField2.getText();
-        if (name.isBlank()) {
+        if (name.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Empty name input field", "warning", JOptionPane.WARNING_MESSAGE);
-        } else if (password.isBlank()) {
+        } else if (password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Empty name password field", "warning", JOptionPane.WARNING_MESSAGE);
         } else {
             try {

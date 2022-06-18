@@ -99,14 +99,14 @@ public class NewJFrame extends javax.swing.JFrame {
         UserModel um2 = new UserModel(2, "rag3", "rag2");
         UserModel um3 = new UserModel(2, "rag2", "rag3");
 
-        Vector v = new Vector();
+        Vector<UserModel> v = new Vector<UserModel>();
         v.add(um1);
         v.add(um2);
         v.add(um3);
         String path = "src//JasperReport//T.jrxml";
         try {
             JasperReport jr = JasperCompileManager.compileReport(path);
-            HashMap hm = new HashMap();
+            HashMap<String,Object>  hm= new HashMap<String,Object>();
             Connection gcon = MySql.getConnection();
 //            JRBeanCollectionDataSource jb = new JRBeanCollectionDataSource(v);
 

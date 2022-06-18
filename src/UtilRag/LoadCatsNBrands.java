@@ -5,9 +5,12 @@
 package UtilRag;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.event.ListDataListener;
 import model.MySql;
 
 /**
@@ -16,17 +19,16 @@ import model.MySql;
  */
 public class LoadCatsNBrands {
 
-    public void loadCats(JComboBox jcombobox) {
+    public void loadCats(JComboBox<String> jcombobox) {
 
         DefaultComboBoxModel dcmb = (DefaultComboBoxModel) jcombobox.getModel();
         jcombobox.removeAllItems();
         dcmb.setSelectedItem("Select Category");
         try {
             ResultSet rs = MySql.sq("SELECT * FROM `category`");
+
             while (rs.next()) {
-                Vector v = new Vector();
-                v.add(rs.getString("category_id"));
-                v.add(rs.getString("category_name"));
+
                 String utn = rs.getString("category_name");
 
                 jcombobox.addItem(utn);
@@ -37,7 +39,7 @@ public class LoadCatsNBrands {
         }
     }
 
-    public void loadBrands(JComboBox jcombobox) {
+    public void loadBrands(JComboBox<String> jcombobox) {
 
         DefaultComboBoxModel dcmb = (DefaultComboBoxModel) jcombobox.getModel();
         jcombobox.removeAllItems();
@@ -45,7 +47,7 @@ public class LoadCatsNBrands {
         try {
             ResultSet rs = MySql.sq("SELECT * FROM `brand`");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("brand_id"));
                 v.add(rs.getString("brand_name"));
                 String utn = rs.getString("brand_name");
@@ -58,19 +60,16 @@ public class LoadCatsNBrands {
         }
     }
 
-    public void loadCities(JComboBox jcombobox) {
+    public void loadCities(JComboBox<String> jcombobox) {
 
         DefaultComboBoxModel dcmb = (DefaultComboBoxModel) jcombobox.getModel();
         jcombobox.removeAllItems();
         dcmb.setSelectedItem("Select City");
         try {
             ResultSet rs = MySql.sq("SELECT * FROM `city`");
-            while (rs.next()) {
-                Vector v = new Vector();
-                v.add(rs.getString("city_id"));
-                v.add(rs.getString("city_name"));
-                String utn = rs.getString("city_name");
 
+            while (rs.next()) {
+                String utn = rs.getString("city_name");         
                 jcombobox.addItem(utn);
 
             }
@@ -79,3 +78,4 @@ public class LoadCatsNBrands {
         }
     }
 }
+

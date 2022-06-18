@@ -22,9 +22,11 @@ public class Stock extends javax.swing.JFrame {
     /**
      * Creates new form Stock
      */
+    UtilRag.LoadCatsNBrands lc;
+
     public Stock() {
         initComponents();
-        UtilRag.LoadCatsNBrands lc = new UtilRag.LoadCatsNBrands();
+        lc = new UtilRag.LoadCatsNBrands();
         lc.loadCats(jComboBox2);
         lc.loadBrands(jComboBox1);
         loadTables();
@@ -95,7 +97,7 @@ public class Stock extends javax.swing.JFrame {
                 expFrom = sdf.format(jDateChooser4.getDate()).toString();
             }
 
-            Vector v = new Vector();
+            Vector<String> v = new Vector<String>();
 
             if (brand.equals("Select Brand")) {
 

@@ -299,19 +299,19 @@ public class ManageUsers extends javax.swing.JFrame {
         String c = jTextField4.getText();
         String t = jcomboBox1.getSelectedItem().toString();
 
-        if (fn.isBlank()) {
+        if (fn.isEmpty()) {
             JOptionPane.showMessageDialog(this, "user full name cannot be empty", "warning", JOptionPane.WARNING_MESSAGE);
         } else if (fn.equals("Full_Name")) {
             JOptionPane.showMessageDialog(this, "full name cannot have this value", "warning", JOptionPane.WARNING_MESSAGE);
-        } else if (un.isBlank()) {
+        } else if (un.isEmpty()) {
             JOptionPane.showMessageDialog(this, "user name cannot be empty", "warning", JOptionPane.WARNING_MESSAGE);
         } else if (un.equals("User_Name")) {
             JOptionPane.showMessageDialog(this, "User name cannot have this value", "warning", JOptionPane.WARNING_MESSAGE);
-        } else if (p.isBlank()) {
+        } else if (p.isEmpty()) {
             JOptionPane.showMessageDialog(this, "password cannot be empty", "warning", JOptionPane.WARNING_MESSAGE);
         } else if (p.equals("Password")) {
             JOptionPane.showMessageDialog(this, "password cannot have this value", "warning", JOptionPane.WARNING_MESSAGE);
-        } else if (c.isBlank()) {
+        } else if (c.isEmpty()) {
             JOptionPane.showMessageDialog(this, "contact number cannot be empty", "warning", JOptionPane.WARNING_MESSAGE);
         } else if (c.equals("User_Contact")) {
             JOptionPane.showMessageDialog(this, "contact number cannot have this value", "warning", JOptionPane.WARNING_MESSAGE);
@@ -341,7 +341,7 @@ public class ManageUsers extends javax.swing.JFrame {
                     + "INNER JOIN `user_type`\n"
                     + "ON `user_type`.`user_type_id`=`user`.`user_type_id`");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("user_id"));
                 v.add(rs.getString("user_full_name"));
                 v.add(rs.getString("user_name"));

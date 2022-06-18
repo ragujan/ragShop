@@ -168,7 +168,7 @@ public class CategoryReg extends javax.swing.JDialog {
         try {
             ResultSet rs = MySql.sq("SELECT * FROM `category`");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("category_id"));
                 v.add(rs.getString("category_name"));
                 dftm.addRow(v);
@@ -179,7 +179,7 @@ public class CategoryReg extends javax.swing.JDialog {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String text = jTextField1.getText();
-        if (text.isBlank() || text.equals("Category_Name")) {
+        if (text.isEmpty() || text.equals("Category_Name")) {
             JOptionPane.showMessageDialog(this, "Should not empty ", "Warning", JOptionPane.WARNING_MESSAGE);
         } else {
 

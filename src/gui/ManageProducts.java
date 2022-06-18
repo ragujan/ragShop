@@ -260,7 +260,7 @@ public class ManageProducts extends javax.swing.JFrame {
                     + "INNER JOIN `category`\n"
                     + "ON `category`.`category_id` = `product`.`category_id`");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("product_id"));
                 v.add(rs.getString("product_name"));
 
@@ -286,7 +286,7 @@ public class ManageProducts extends javax.swing.JFrame {
                     + "INNER JOIN `category`\n"
                     + "ON `category`.`category_id` = `product`.`category_id`");
             while (rs.next()) {
-                Vector v = new Vector();
+                 Vector<String> v = new Vector<String>();
                 v.add(rs.getString("product_id"));
                 v.add(rs.getString("product_name"));
 
@@ -307,7 +307,7 @@ public class ManageProducts extends javax.swing.JFrame {
         String brand = jComboBox1.getSelectedItem().toString();
         String cat = jComboBox2.getSelectedItem().toString();
         System.out.println(jComboBox1.getSelectedIndex());
-        if (name.isBlank() || name.equals("product_name")) {
+        if (name.isEmpty() || name.equals("product_name")) {
             JOptionPane.showMessageDialog(this, "not a valid product name", "warning", JOptionPane.WARNING_MESSAGE);
 
         } else if (jComboBox1.getSelectedIndex() == -1) {
@@ -343,7 +343,7 @@ public class ManageProducts extends javax.swing.JFrame {
         try {
             ResultSet rs = MySql.sq("SELECT * FROM `category`");
             while (rs.next()) {
-                Vector v = new Vector();
+                 Vector<String> v = new Vector<String>();
                 v.add(rs.getString("category_id"));
                 v.add(rs.getString("category_name"));
                 String utn = rs.getString("category_name");
@@ -364,7 +364,7 @@ public class ManageProducts extends javax.swing.JFrame {
         try {
             ResultSet rs = MySql.sq("SELECT * FROM `brand`");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("brand_id"));
                 v.add(rs.getString("brand_name"));
                 String utn = rs.getString("brand_name");

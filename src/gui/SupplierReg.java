@@ -416,7 +416,7 @@ public class SupplierReg extends javax.swing.JFrame {
                     + "INNER JOIN company\n"
                     + "ON company.company_id = branch.company_id");
             while (rs.next()) {
-                Vector v = new Vector();
+                Vector<String> v = new Vector<String>();
                 v.add(rs.getString("supplier_id"));
                 v.add(rs.getString("supplier_name"));
                 v.add(rs.getString("supplier_contact_number"));
