@@ -30,6 +30,22 @@ public class InsertTable {
         this.executeInsertQuery();
     }
 
+    public InsertTable(String tableName, ArrayList<String> columnValueStringArray, int switcher) {
+        if (switcher == 0) {
+            this.tableName = tableName;
+            this.columnValueStringArray = columnValueStringArray;
+            this.columnNameStringArray = new ArrayList<String>();
+            this.querybuild = new StringBuilder("");
+            setColumnQuery(tableName);
+            this.getColumnNames();
+            this.setInsertQueryTable();
+            this.setValuesforColumns();
+            System.out.println("query build is " + this.querybuild);
+        } else if (switcher == 1) {
+
+            //(String tableName, ArrayList<String> columnValueStringArray);
+        }
+    }
     public String query;
     private String tableName;
     private String columnQuery;
@@ -41,7 +57,7 @@ public class InsertTable {
     private void setColumnQuery(String tableName) {
         this.columnQuery = "SELECT *\n"
                 + "FROM INFORMATION_SCHEMA.COLUMNS\n"
-                + "WHERE TABLE_SCHEMA = 'ragmodelshopapp' AND TABLE_NAME = '" + tableName + "' AND EXTRA !='auto_increment'";
+                + "WHERE TABLE_SCHEMA = 'ragmodelshopapp' AND TABLE_NAME = '" + tableName + "' AND EXTRA !='auto_increment' ORDER BY COLUMN_NAME ASC";
     }
 
     private void setTableName(String tableName) {
@@ -79,7 +95,7 @@ public class InsertTable {
             }
         }
         querybuild.append(") VALUES (");
-        
+
     }
 
     private void setValuesforColumns() {
@@ -103,5 +119,3 @@ public class InsertTable {
         }
     }
 }
-
-

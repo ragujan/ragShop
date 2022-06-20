@@ -69,7 +69,25 @@ public class LoadCatsNBrands {
             ResultSet rs = MySql.sq("SELECT * FROM `city`");
 
             while (rs.next()) {
-                String utn = rs.getString("city_name");         
+                String utn = rs.getString("city_name");
+                jcombobox.addItem(utn);
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadPayments(JComboBox<String> jcombobox) {
+
+        DefaultComboBoxModel dcmb = (DefaultComboBoxModel) jcombobox.getModel();
+        jcombobox.removeAllItems();
+        dcmb.setSelectedItem("Select Payment");
+        try {
+            ResultSet rs = MySql.sq("SELECT * FROM `payment_method`");
+
+            while (rs.next()) {
+                String utn = rs.getString("payment_method_name");
                 jcombobox.addItem(utn);
 
             }
@@ -78,4 +96,3 @@ public class LoadCatsNBrands {
         }
     }
 }
-

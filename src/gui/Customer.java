@@ -33,15 +33,15 @@ public class Customer extends javax.swing.JDialog {
      * Creates new form Customer
      */
     JFrame jf;
-    NewInvoice ni;
-
+    Invoice ni;
+    Customer thiscustomer;
     public Customer(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
-
+        this.thiscustomer = this;
         initComponents();
-        if (parent instanceof NewInvoice) {
+        if (parent instanceof Invoice) {
 
-            this.ni = (NewInvoice) parent;
+            this.ni = (Invoice) parent;
             tableListernRag();
         }
         LoadCatsNBrands lcb = new LoadCatsNBrands();
@@ -66,6 +66,7 @@ public class Customer extends javax.swing.JDialog {
                     ni.cusid.setText(cusid);
                     ni.cusname.setText(cusname);
                     ni.cuscontact.setText(cuscontact);
+                    thiscustomer.dispose();
                 }
             }
 
@@ -86,7 +87,7 @@ public class Customer extends javax.swing.JDialog {
     public void filterContactNumberField() {
         String regex = "((([0][7][24-8][0-9]{7})|([0][7][24-8][0-9]*))|([0][7][24-8])|[0][7]|[0])";
         FilterDocRagRegex fdrr = new FilterDocRagRegex(jTextField2, regex);
-        fdrr.setDocFilter();
+        //fdrr.setDocFilter();
     }
 
     public void loadCustomerTable() {
@@ -288,9 +289,11 @@ public class Customer extends javax.swing.JDialog {
                     String cityId = getCity.getString("city_id");
                     ArrayList<String> al = new ArrayList<String>();
                     ArrayList<String> columnValueStringArray = new ArrayList<String>();
-                    al.add(cname);
-                    al.add(contact);
                     al.add(cityId);
+                    al.add(contact);
+                    al.add(cname);
+                    
+                    
                     InsertTable itc = new InsertTable("customer", al);
                     setComponentsEmpty();
                     loadCustomerTable();

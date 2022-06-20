@@ -8,6 +8,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
 import java.sql.ResultSet;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import model.MySql;
 
@@ -22,8 +23,16 @@ public class SignIn extends javax.swing.JFrame {
     /**
      * Creates new form SignIn
      */
+    boolean newInvoiceInvolved;
+
     public SignIn() {
         initComponents();
+    }
+
+    public SignIn(Invoice ni) {
+        this();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.newInvoiceInvolved = true;
     }
 
     /**
@@ -120,8 +129,11 @@ public class SignIn extends javax.swing.JFrame {
 
                     userIDStatic = userID;
                     JOptionPane.showMessageDialog(this, "Sign In Success", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    Home h = new Home();
-                    h.setVisible(true);
+                    if (!(this.newInvoiceInvolved)) {
+                        Home h = new Home();
+                        h.setVisible(true);
+
+                    }
                     this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Sign In failed", "warning", JOptionPane.WARNING_MESSAGE);
@@ -145,7 +157,7 @@ public class SignIn extends javax.swing.JFrame {
             IntelliJTheme.setup(SignIn.class.getResourceAsStream(
                     "../resources/Night Owl Contrast.theme.json"));
         } catch (Exception e) {
-            
+
         }
         //</editor-fold>
 

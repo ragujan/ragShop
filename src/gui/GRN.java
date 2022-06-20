@@ -939,16 +939,16 @@ public class GRN extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
-    int totalCost = 0;
-    int totalS = 0;
+//    int totalCost = 0;
+//    int totalS = 0;
 
     private int updateTotal() {
         DefaultTableModel dftm = (DefaultTableModel) jTable1.getModel();
-        int total = 0;
+
+          int total = 0;
         if (dftm.getRowCount() >= 1) {
             for (int i = 0; i < dftm.getRowCount(); i++) {
-
-                total = Integer.parseInt(jTable1.getValueAt(i, 9).toString()) + total;
+              total = Integer.parseInt(jTable1.getValueAt(i, 9).toString()) + total;
                 System.out.println("total is " + total);
             }
         } else {
@@ -1009,7 +1009,7 @@ public class GRN extends javax.swing.JFrame {
         } else {
             // System.exit(0);
             int total = Integer.parseInt(qty) * Integer.parseInt(buyingPrice);
-             Vector<String> v = new Vector<String>();
+            Vector<String> v = new Vector<String>();
             v.add(category);
             v.add(productID);
             v.add(brand);
@@ -1059,7 +1059,7 @@ public class GRN extends javax.swing.JFrame {
         String jasperPath = "src//reports//JRep1.jrxml";
         try {
             JasperReport jr = JasperCompileManager.compileReport(jasperPath);
-            HashMap<String,Object> hm = new HashMap<String,Object>();
+            HashMap<String, Object> hm = new HashMap<String, Object>();
             hm.put("Grnid", GrnID);
             hm.put("Supplier", sname);
             hm.put("Dateandtime", d);
@@ -1197,6 +1197,8 @@ public class GRN extends javax.swing.JFrame {
 
             tableclickCount = 0;
         }
+    
+ 
 
     }//GEN-LAST:event_jTable1MouseClicked
 

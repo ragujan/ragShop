@@ -9,8 +9,11 @@ import com.formdev.flatlaf.IntelliJTheme;
 import java.text.SimpleDateFormat;
 import java.util.Vector;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import model.MySql;
 
 /**
@@ -23,6 +26,8 @@ public class Stock extends javax.swing.JFrame {
      * Creates new form Stock
      */
     UtilRag.LoadCatsNBrands lc;
+    Invoice ni;
+    Stock s;
 
     public Stock() {
         initComponents();
@@ -30,6 +35,15 @@ public class Stock extends javax.swing.JFrame {
         lc.loadCats(jComboBox2);
         lc.loadBrands(jComboBox1);
         loadTables();
+        this.s = this;
+    }
+
+    public Stock(Invoice ni) {
+        this();
+        this.ni = ni;
+        tableListernRag();
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
     }
 
     public void loadTables() {
@@ -50,12 +64,52 @@ public class Stock extends javax.swing.JFrame {
 
     }
 
+    public void tableListernRag() {
+        jTable1.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                int row = jTable1.getSelectedRow();
+                if (row != -1) {
+
+                    String stockId = jTable1.getValueAt(row, 0).toString();
+                    String productId = jTable1.getValueAt(row, 1).toString();
+                    String productName = jTable1.getValueAt(row, 2).toString();
+                    String productQty = jTable1.getValueAt(row, 3).toString();
+                    String productCat = jTable1.getValueAt(row, 4).toString();
+                    String productBrand = jTable1.getValueAt(row, 5).toString();
+                    String productSellingPrice = jTable1.getValueAt(row, 6).toString();
+                    String productBuyingPrice = jTable1.getValueAt(row, 7).toString();
+                    String productmfd = jTable1.getValueAt(row, 8).toString();
+                    String productexp = jTable1.getValueAt(row, 9).toString();
+
+                    ni.sid.setText(stockId);
+                    ni.pid.setText(productId);
+                    ni.pname.setText(productName);
+                    //ni.pqty.setText(productQty);
+                    ni.pcategory.setText(productCat);
+                    ni.pbrand.setText(productBrand);
+                    ni.bprice.setText(productBuyingPrice);
+                    ni.sprice.setText(productSellingPrice);
+                    ni.mfd.setText(productmfd);
+                    ni.exp.setText(productexp);
+                    ni.maxQty = Integer.parseInt(productQty);
+                    s.dispose();
+                    if (!ni.pid.getText().equals("none")) {
+                        ni.jButton3.setEnabled(true);
+                        
+                    }
+                }
+            }
+
+        });
+
+    }
+
     public void searchables() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String sortquery = "";
         String WhereQuery = "";
 
-        System.out.println("getSelectedItem is " + jComboBox1.getSelectedItem());
         if (jComboBox3.getSelectedItem() == null
                 || jComboBox1.getSelectedItem() == null
                 || jComboBox2.getSelectedItem() == null
@@ -63,7 +117,7 @@ public class Stock extends javax.swing.JFrame {
                 || jDateChooser2.getDate() == null
                 || jDateChooser3.getDate() == null
                 || jDateChooser4.getDate() == null) {
-            System.out.println("Have to choose one of things");
+
         } else {
 
             String sort = null;
@@ -310,6 +364,11 @@ public class Stock extends javax.swing.JFrame {
             }
         });
 
+        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField2ActionPerformed(evt);
+            }
+        });
         jTextField2.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextField2KeyReleased(evt);
@@ -658,6 +717,10 @@ public class Stock extends javax.swing.JFrame {
         // TODO add your handling code here:
         searchables();
     }//GEN-LAST:event_jTextField4ActionPerformed
+
+    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -22,6 +22,7 @@ public class FilterDocRagRegex {
     public FilterDocRagRegex(JTextField jt, String regex) {
         this.regex = regex;
         this.jt = jt;
+        setDocFilter();
     }
 
     public void setDocFilter() {
